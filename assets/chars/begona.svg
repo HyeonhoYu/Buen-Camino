@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Begoña, white stork">
+  <defs><clipPath id="c"><circle cx="60" cy="60" r="58"/></clipPath></defs>
+  <circle cx="60" cy="60" r="58" fill="#DCE4F1"/>
+  <g clip-path="url(#c)">
+    <!-- nest -->
+    <path d="M8 106 Q60 92 112 106 L112 124 L8 124 Z" fill="#9A7348"/>
+    <path d="M14 108 L44 114 M30 104 L70 112 M60 103 L100 110 M80 106 L108 116" stroke="#6B4E2E" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- body with black flight feathers -->
+    <ellipse cx="58" cy="96" rx="32" ry="17" fill="#fff" stroke="#1E2633" stroke-width="2"/>
+    <path d="M62 86 Q86 82 96 96 Q84 108 64 106 Q76 96 62 86 Z" fill="#1E2633"/>
+    <!-- neck -->
+    <path d="M47 46 C44 66 42 80 44 94 L66 94 C63 80 62 64 63 46 Z" fill="#fff"/>
+    <path d="M47 46 C44 66 42 80 44 94 M63 46 C62 64 63 80 66 94" fill="none" stroke="#1E2633" stroke-width="2"/>
+  </g>
+  <!-- head -->
+  <circle cx="55" cy="40" r="14" fill="#fff" stroke="#1E2633" stroke-width="2"/>
+  <!-- long red beak -->
+  <path d="M66 36 L110 48 L66 46 Z" fill="#E0542E" stroke="#8A2A12" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M66 41 L104 47" stroke="#8A2A12" stroke-width="1.2"/>
+  <!-- eye -->
+  <circle cx="58" cy="36" r="3.4" fill="#1E2633"/><circle cx="59" cy="35" r="1.1" fill="#fff"/>
+  <path d="M53 33 Q58 30 62 33" fill="none" stroke="#1E2633" stroke-width="1.6" stroke-linecap="round"/>
+</svg>

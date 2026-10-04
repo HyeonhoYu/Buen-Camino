@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Buen Camino - 순례길에서 배우는 스페인어</title>
-<meta name="description" content="산티아고 순례길을 한 구간씩 걸으며 스페인 여행 스페인어를 배우는 무료 사이트. 가입 없음, 광고 없음.">
+<title>Buen Camino: Spanish on the Way of St. James</title>
+<meta name="description" content="Learn travel Spanish for Spain one stretch of the Camino de Santiago at a time. Free, no sign-up, no ads. Available in English and Korean.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
@@ -13,18 +13,21 @@
 <div class="wrap">
   <header class="top">
     <a class="brand" href="./">Buen Camino</a>
-    <nav><a href="#credencial">나의 크레덴시알</a><a href="#guide">배우는 방법</a></nav>
+    <div class="right">
+      <nav><a href="#credencial" data-i18n="navCred">My credencial</a><a href="#guide" data-i18n="navGuide">How it works</a></nav>
+      <button class="lang-btn" id="lang" type="button">한국어</button>
+    </div>
   </header>
 
   <main>
     <div class="hero">
       <h1>Buen Camino</h1>
-      <p class="sub">노란 화살표를 따라 한 걸음씩, 스페인 여행에서 바로 쓰는 스페인어를 배워요.</p>
+      <p class="sub" data-i18n="sub">Follow the yellow arrows one step at a time and learn the Spanish you will actually use in Spain.</p>
       <div class="actions">
-        <a class="btn go" href="tramo-1/?etapa=1">출발하기</a>
-        <a class="btn" href="tramo-1/">구간 고르기</a>
+        <a class="btn go" href="tramo-1/?etapa=1" data-i18n="start">Start walking</a>
+        <a class="btn" href="tramo-1/" data-i18n="pick">Choose a stretch</a>
       </div>
-      <div class="route"><svg viewBox="-50 0 1090 180" role="img" aria-label="론세스바예스에서 산티아고까지 이어지는 일곱 구간의 순례길">
+      <div class="route"><svg viewBox="-50 0 1090 180" role="img" aria-label="The pilgrim route in seven stretches, from Roncesvalles to Santiago">
   <path d="M 50 110 Q 114 80 179 95 Q 243 130 307 120 Q 371 88 436 100 Q 500 122 564 100 Q 629 86 693 115 Q 757 124 821 90 Q 886 76 950 105" fill="none" stroke="#C9CCC3" stroke-width="10" stroke-linecap="round"/>
   <path d="M 50 110 Q 114 80 179 95 Q 243 130 307 120 Q 371 88 436 100 Q 500 122 564 100 Q 629 86 693 115 Q 757 124 821 90 Q 886 76 950 105" fill="none" stroke="#F2B705" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 14"/>
   <circle cx="50" cy="110" r="9" fill="#1F4B8E" stroke="#1F4B8E" stroke-width="3"/><text x="50" y="86" text-anchor="middle" font-family="Alegreya,Georgia,serif" font-size="20" font-weight="600" fill="#1E2633">Roncesvalles</text><circle cx="179" cy="95" r="7" fill="#1F4B8E" stroke="#1F4B8E" stroke-width="3"/><text x="179" y="131" text-anchor="middle" font-family="Alegreya,Georgia,serif" font-size="20" font-weight="600" fill="#1E2633">Pamplona</text><circle cx="307" cy="120" r="7" fill="#ECEDE8" stroke="#1F4B8E" stroke-width="3"/><text x="307" y="96" text-anchor="middle" font-family="Alegreya,Georgia,serif" font-size="20" font-weight="600" fill="#1E2633">Logroño</text><circle cx="436" cy="100" r="7" fill="#ECEDE8" stroke="#1F4B8E" stroke-width="3"/><text x="436" y="136" text-anchor="middle" font-family="Alegreya,Georgia,serif" font-size="20" font-weight="600" fill="#1E2633">Burgos</text><circle cx="564" cy="100" r="7" fill="#ECEDE8" stroke="#1F4B8E" stroke-width="3"/><text x="564" y="76" text-anchor="middle" font-family="Alegreya,Georgia,serif" font-size="20" font-weight="600" fill="#1E2633">León</text><circle cx="693" cy="115" r="7" fill="#ECEDE8" stroke="#1F4B8E" stroke-width="3"/><text x="693" y="151" text-anchor="middle" font-family="Alegreya,Georgia,serif" font-size="20" font-weight="600" fill="#1E2633">Ponferrada</text><circle cx="821" cy="90" r="7" fill="#ECEDE8" stroke="#1F4B8E" stroke-width="3"/><text x="821" y="66" text-anchor="middle" font-family="Alegreya,Georgia,serif" font-size="20" font-weight="600" fill="#1E2633">Sarria</text><circle cx="950" cy="105" r="7" fill="#ECEDE8" stroke="#1F4B8E" stroke-width="3"/><text x="950" y="141" text-anchor="middle" font-family="Alegreya,Georgia,serif" font-size="20" font-weight="600" fill="#1E2633">Santiago</text>
@@ -34,70 +37,141 @@
     </div>
 
     <section id="tramos" aria-labelledby="t-tramos">
-      <h2 id="t-tramos">일곱 구간</h2>
-      <p class="lead">프랑스 길을 론세스바예스부터 산티아고까지 일곱 구간으로 나눴어요. 구간마다 그 길에서 실제로 마주칠 상황을 배우고, 과를 마칠 때마다 크레덴시알에 도장을 받아요.</p>
+      <h2 id="t-tramos" data-i18n="hTramos">Seven stretches</h2>
+      <p class="lead" data-i18n="leadTramos">The French Way, from Roncesvalles to Santiago, split into seven stretches. Each one teaches what you will really run into on that part of the trail, and every lesson you finish earns a stamp in your credencial.</p>
       <ol class="tramos">
-        <li class="open"><div class="name"><a href="tramo-1/">론세스바예스에서 팜플로나까지</a><span class="tag open">열림</span></div><div class="what">소리와 철자. 모음, 자음, 강세와 악센트 부호</div></li>
-        <li><div class="name">팜플로나에서 로그로뇨까지<span class="tag">준비 중</span></div><div class="what">인사, 자기소개, 숫자, 돈</div></li>
-        <li><div class="name">로그로뇨에서 부르고스까지<span class="tag">준비 중</span></div><div class="what">음식 주문, 순례자 메뉴, 좋아하는 것 말하기</div></li>
-        <li><div class="name">메세타 고원, 부르고스에서 레온까지<span class="tag">준비 중</span></div><div class="what">길 묻기, 시간, 날씨, 약국에서 몸 상태 설명하기</div></li>
-        <li><div class="name">레온에서 폰페라다까지<span class="tag">준비 중</span></div><div class="what">숙소 예약과 문제 해결, 오늘 한 일 말하기</div></li>
-        <li><div class="name">폰페라다에서 사리아까지<span class="tag">준비 중</span></div><div class="what">쇼핑, 비교하기, 갈리시아의 두 언어</div></li>
-        <li><div class="name">사리아에서 산티아고까지<span class="tag">준비 중</span></div><div class="what">계획과 감정, 나의 순례 이야기 쓰기</div></li>
+        <li class="open"><div class="name"><a href="tramo-1/" data-i18n="tn0">Roncesvalles to Pamplona</a><span class="tag open" data-i18n="open">Open</span></div><div class="what" data-i18n="tw0">Sounds and spelling: vowels, consonants, stress, and accent marks</div></li>
+<li><div class="name"><span data-i18n="tn1">Pamplona to Logroño</span><span class="tag" data-i18n="soon">Coming soon</span></div><div class="what" data-i18n="tw1">Greetings, introducing yourself, numbers, money</div></li>
+<li><div class="name"><span data-i18n="tn2">Logroño to Burgos</span><span class="tag" data-i18n="soon">Coming soon</span></div><div class="what" data-i18n="tw2">Ordering food, the pilgrim menu, saying what you like</div></li>
+<li><div class="name"><span data-i18n="tn3">The Meseta, Burgos to León</span><span class="tag" data-i18n="soon">Coming soon</span></div><div class="what" data-i18n="tw3">Asking the way, time, weather, explaining how you feel at the pharmacy</div></li>
+<li><div class="name"><span data-i18n="tn4">León to Ponferrada</span><span class="tag" data-i18n="soon">Coming soon</span></div><div class="what" data-i18n="tw4">Booking a bed, solving problems, talking about what you did today</div></li>
+<li><div class="name"><span data-i18n="tn5">Ponferrada to Sarria</span><span class="tag" data-i18n="soon">Coming soon</span></div><div class="what" data-i18n="tw5">Shopping, comparing, Galicia's two languages</div></li>
+<li><div class="name"><span data-i18n="tn6">Sarria to Santiago</span><span class="tag" data-i18n="soon">Coming soon</span></div><div class="what" data-i18n="tw6">Plans and feelings, writing your own pilgrim story</div></li>
       </ol>
     </section>
 
     <section aria-labelledby="t-rooms">
-      <h2 id="t-rooms">연습실</h2>
-      <p class="lead">본 과정 옆에서 매일 조금씩, 또는 골라서 해요.</p>
+      <h2 id="t-rooms" data-i18n="hRooms">Practice rooms</h2>
+      <p class="lead" data-i18n="leadRooms">Alongside the main route: a little every day, or whatever you pick.</p>
       <div class="two">
-        <div class="room"><h3>오늘의 걸음 <span class="tag">준비 중</span></h3><p>마친 과의 낱말 다섯 개를 듣고 써요. 틀린 말은 다음 날 다시 나와요.</p></div>
-        <div class="room"><h3>스페인 기차 여행 <span class="tag">준비 중</span></h3><p>마드리드, 톨레도, 세비야, 그라나다, 발렌시아. 도시마다 세 과짜리 꾸러미를 골라서 해요.</p></div>
+        <div class="room"><h3><span data-i18n="r1h">Today's steps</span> <span class="tag" data-i18n="soon">Coming soon</span></h3><p data-i18n="r1p">Hear five words from lessons you finished and write them. Words you miss come back the next day.</p></div>
+        <div class="room"><h3><span data-i18n="r2h">Train trips across Spain</span> <span class="tag" data-i18n="soon">Coming soon</span></h3><p data-i18n="r2p">Madrid, Toledo, Seville, Granada, Valencia. Each city is a three-lesson bundle you can pick up any time.</p></div>
       </div>
     </section>
 
     <section aria-labelledby="t-friends">
-      <h2 id="t-friends">길동무</h2>
-      <p class="lead">세 친구의 이름에는 첫째 구간에서 배우는 소리가 하나씩 숨어 있어요.</p>
+      <h2 id="t-friends" data-i18n="hFriends">Trail companions</h2>
+      <p class="lead" data-i18n="leadFriends">Each friend's name hides one of the sounds you learn in the first stretch.</p>
       <div class="friends">
-        <div class="friend"><div class="avatar av-lucia" aria-hidden="true">L</div><div><h3><span class="es">Lucía</span>, 이베리아스라소니</h3><p>귀가 밝아 발음을 맡아요. 이름에 스페인식 c 소리와 악센트 부호가 들어 있어요.</p></div></div>
-        <div class="friend"><div class="avatar av-ramon" aria-hidden="true">R</div><div><h3><span class="es">Ramón</span>, 당나귀</h3><p>짐을 지고 천천히 걸어요. 틀렸을 때 왜 틀렸는지 알려 줘요.</p></div></div>
-        <div class="friend"><div class="avatar av-begona" aria-hidden="true">B</div><div><h3><span class="es">Begoña</span>, 황새</h3><p>성당 종탑에서 길을 내려다보며 지역 이야기를 전해 줘요.</p></div></div>
+        <div class="friend"><div class="avatar"><img src="assets/chars/lucia.svg" alt="" width="120" height="120" data-char="lucia"></div><div><h3 data-i18n="f1h"><span class="es">Lucía</span>, the Iberian lynx</h3><p data-i18n="f1p">Sharp ears, so she handles pronunciation. Her name has Spain's c sound and an accent mark.</p></div></div>
+        <div class="friend"><div class="avatar"><img src="assets/chars/ramon.svg" alt="" width="120" height="120" data-char="ramon"></div><div><h3 data-i18n="f2h"><span class="es">Ramón</span>, the donkey</h3><p data-i18n="f2p">Carries the packs and never hurries. When you miss something, he tells you why.</p></div></div>
+        <div class="friend"><div class="avatar"><img src="assets/chars/begona.svg" alt="" width="120" height="120" data-char="begona"></div><div><h3 data-i18n="f3h"><span class="es">Begoña</span>, the stork</h3><p data-i18n="f3p">Watches the trail from church bell towers and brings you stories about each region.</p></div></div>
       </div>
     </section>
 
     <section id="credencial" aria-labelledby="t-cred">
-      <h2 id="t-cred">나의 크레덴시알</h2>
-      <p class="lead">순례자 여권이에요. 과를 마치면 도장이 찍히고, 동그라미는 그 과에서 받은 걸음 수예요.</p>
+      <h2 id="t-cred" data-i18n="hCred">My credencial</h2>
+      <p class="lead" data-i18n="leadCred">Your pilgrim passport. Finish a lesson and it gets stamped; the circles show how many steps you earned.</p>
       <div class="credencial">
-        <header><strong>Credencial del Peregrino</strong><span>첫째 구간, 론세스바예스에서 팜플로나까지</span></header>
+        <header><strong>Credencial del Peregrino</strong><span data-i18n="credSub">First stretch, Roncesvalles to Pamplona</span></header>
         <div class="sellos" id="sellos"></div>
       </div>
     </section>
 
     <section id="guide" class="guide" aria-labelledby="t-guide">
-      <h2 id="t-guide">배우는 방법</h2>
-      <h3>하루 한 과, 10분</h3>
-      <p>한 과는 소리 듣기, 글자 고르기, 따라 말하기, 모음 채우기, 도장 받기 순서로 가요. 걸음을 세 개 다 받지 못했다면 다음 날 같은 과를 다시 걸어도 좋아요.</p>
-      <h3>스페인에서 쓰는 스페인어</h3>
-      <p>발음과 낱말은 스페인 기준이에요. 기기의 스페인(es-ES) 음성으로 소리를 내고, 녹음한 목소리는 차례로 늘려 갈 예정이에요.</p>
-      <h3>따라 말하기는 크롬에서</h3>
-      <p>말한 소리를 확인하는 기능은 크롬과 엣지, 안드로이드 크롬에서 가장 잘 돼요. 지원하지 않는 브라우저에서는 듣고 스스로 확인하면 돼요.</p>
-      <h3>가입도 광고도 없어요</h3>
-      <p>진도는 지금 쓰는 기기의 브라우저에만 저장돼요. 기기를 바꾸면 진도가 따라가지 않아요.</p>
+      <h2 id="t-guide" data-i18n="hGuide">How it works</h2>
+      <h3 data-i18n="g1h">One lesson a day, ten minutes</h3>
+      <p data-i18n="g1p">Each lesson goes: listen, pick the letter, say it, fill in the vowels, get your stamp. If you did not earn all three steps, walk the same lesson again tomorrow.</p>
+      <h3 data-i18n="g2h">The Spanish of Spain</h3>
+      <p data-i18n="g2p">Pronunciation and vocabulary follow Spain. Sounds come from your device's Spain Spanish (es-ES) voice, and recorded voices will be added over time.</p>
+      <h3 data-i18n="g3h">Speaking practice works best in Chrome</h3>
+      <p data-i18n="g3p">Checking what you say works best in Chrome, Edge, and Chrome on Android. In other browsers, listen and compare on your own.</p>
+      <h3 data-i18n="g4h">No sign-up, no ads</h3>
+      <p data-i18n="g4p">Progress is saved only in this browser on this device. If you switch devices, your progress stays behind.</p>
+    </section>
+
+    <section id="coffee" aria-labelledby="t-coffee">
+      <div class="coffee">
+        <svg class="cup" viewBox="0 0 72 72" aria-hidden="true"><path d="M14 26 H50 V44 Q50 58 32 58 Q14 58 14 44 Z" fill="#F2B705" stroke="#1E2633" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 30 Q62 30 62 38 Q62 46 50 46" fill="none" stroke="#1E2633" stroke-width="2.5"/><path d="M10 62 H54" stroke="#1E2633" stroke-width="2.5" stroke-linecap="round"/><path d="M24 20 Q20 14 24 8 M33 20 Q29 14 33 8 M42 20 Q38 14 42 8" fill="none" stroke="#5C6675" stroke-width="2" stroke-linecap="round"/><g transform="translate(32 41)"><path d="M-7 4 Q0 -10 7 4 Z" fill="#fff" stroke="#1E2633" stroke-width="1.5" stroke-linejoin="round"/></g></svg>
+        <div>
+          <h2 id="t-coffee" data-i18n="cofH">Support Buen Camino with a coffee</h2>
+          <p data-i18n="cofP">Buen Camino is free for everyone, with no accounts, ads, or payments. If it has helped you on your way, you can thank the maker with a coffee. Every gift goes only toward keeping the site running and growing.</p>
+          <a class="btn go" href="https://buymeacoffee.com/henryyu" target="_blank" rel="noopener">Buy Me a Coffee</a>
+        </div>
+      </div>
     </section>
   </main>
-  <footer>Buen Camino. 만든 사람 Dr. Henry Yu</footer>
+  <footer><div class="links"><span><span data-i18n="foot">Buen Camino. Made by</span> <a href="mailto:hyeonhoyu@gmail.com">Dr. Henry Yu</a></span><a href="https://buymeacoffee.com/henryyu" target="_blank" rel="noopener">Buy Me a Coffee</a></div></footer>
 </div>
 <script src="assets/common.js"></script>
 <script src="assets/tramo-1-data.js"></script>
 <script>
-  const box = document.getElementById('sellos');
-  box.innerHTML = TRAMO1.map(e => {
-    const s = BC.getStamp('1-' + e.n);
-    return s ? '<div class="sello has">' + BC.stampSVG(e.name, s) + '</div>'
-             : '<div class="sello">' + e.n + '과<br>' + e.name + '</div>';
-  }).join('');
+  const KO = {
+ "tn0": "론세스바예스에서 팜플로나까지",
+ "tw0": "소리와 철자. 모음, 자음, 강세와 악센트 부호",
+ "tn1": "팜플로나에서 로그로뇨까지",
+ "tw1": "인사, 자기소개, 숫자, 돈",
+ "tn2": "로그로뇨에서 부르고스까지",
+ "tw2": "음식 주문, 순례자 메뉴, 좋아하는 것 말하기",
+ "tn3": "메세타 고원, 부르고스에서 레온까지",
+ "tw3": "길 묻기, 시간, 날씨, 약국에서 몸 상태 설명하기",
+ "tn4": "레온에서 폰페라다까지",
+ "tw4": "숙소 예약과 문제 해결, 오늘 한 일 말하기",
+ "tn5": "폰페라다에서 사리아까지",
+ "tw5": "쇼핑, 비교하기, 갈리시아의 두 언어",
+ "tn6": "사리아에서 산티아고까지",
+ "tw6": "계획과 감정, 나의 순례 이야기 쓰기",
+ "navCred": "나의 크레덴시알",
+ "navGuide": "배우는 방법",
+ "open": "열림",
+ "soon": "준비 중",
+ "sub": "노란 화살표를 따라 한 걸음씩, 스페인 여행에서 바로 쓰는 스페인어를 배워요.",
+ "start": "출발하기",
+ "pick": "구간 고르기",
+ "hTramos": "일곱 구간",
+ "leadTramos": "프랑스 길을 론세스바예스부터 산티아고까지 일곱 구간으로 나눴어요. 구간마다 그 길에서 실제로 마주칠 상황을 배우고, 과를 마칠 때마다 크레덴시알에 도장을 받아요.",
+ "hRooms": "연습실",
+ "leadRooms": "본 과정 옆에서 매일 조금씩, 또는 골라서 해요.",
+ "r1h": "오늘의 걸음",
+ "r1p": "마친 과의 낱말 다섯 개를 듣고 써요. 틀린 말은 다음 날 다시 나와요.",
+ "r2h": "스페인 기차 여행",
+ "r2p": "마드리드, 톨레도, 세비야, 그라나다, 발렌시아. 도시마다 세 과짜리 꾸러미를 골라서 해요.",
+ "hFriends": "길동무",
+ "leadFriends": "세 친구의 이름에는 첫째 구간에서 배우는 소리가 하나씩 숨어 있어요.",
+ "f1h": "<span class=\"es\">Lucía</span>, 이베리아스라소니",
+ "f1p": "귀가 밝아 발음을 맡아요. 이름에 스페인식 c 소리와 악센트 부호가 들어 있어요.",
+ "f2h": "<span class=\"es\">Ramón</span>, 당나귀",
+ "f2p": "짐을 지고 천천히 걸어요. 틀렸을 때 왜 틀렸는지 알려 줘요.",
+ "f3h": "<span class=\"es\">Begoña</span>, 황새",
+ "f3p": "성당 종탑에서 길을 내려다보며 지역 이야기를 전해 줘요.",
+ "hCred": "나의 크레덴시알",
+ "leadCred": "순례자 여권이에요. 과를 마치면 도장이 찍히고, 동그라미는 그 과에서 받은 걸음 수예요.",
+ "credSub": "첫째 구간, 론세스바예스에서 팜플로나까지",
+ "hGuide": "배우는 방법",
+ "g1h": "하루 한 과, 10분",
+ "g1p": "한 과는 소리 듣기, 글자 고르기, 따라 말하기, 모음 채우기, 도장 받기 순서로 가요. 걸음을 세 개 다 받지 못했다면 다음 날 같은 과를 다시 걸어도 좋아요.",
+ "g2h": "스페인에서 쓰는 스페인어",
+ "g2p": "발음과 낱말은 스페인 기준이에요. 기기의 스페인(es-ES) 음성으로 소리를 내고, 녹음한 목소리는 차례로 늘려 갈 예정이에요.",
+ "g3h": "따라 말하기는 크롬에서",
+ "g3p": "말한 소리를 확인하는 기능은 크롬과 엣지, 안드로이드 크롬에서 가장 잘 돼요. 지원하지 않는 브라우저에서는 듣고 스스로 확인하면 돼요.",
+ "g4h": "가입도 광고도 없어요",
+ "g4p": "진도는 지금 쓰는 기기의 브라우저에만 저장돼요. 기기를 바꾸면 진도가 따라가지 않아요.",
+ "foot": "Buen Camino. 만든 사람",
+ "cofH": "커피 한 잔으로 Buen Camino를 응원해 주세요",
+ "cofP": "Buen Camino는 가입도 광고도 결제도 없이 누구에게나 무료입니다. 순례길 공부에 도움이 되었다면 운영자에게 커피 한 잔으로 마음을 전해 주세요. 전해진 마음은 온전히 웹사이트 유지와 발전을 위해서만 쓰입니다."
+};
+  function render() {
+    BC.applyI18n(KO);
+    document.title = BC.L('Buen Camino: Spanish on the Way of St. James', 'Buen Camino - 순례길에서 배우는 스페인어');
+    document.getElementById('sellos').innerHTML = TRAMO1.map(e => {
+      const s = BC.getStamp('1-' + e.n);
+      return s ? '<div class="sello has">' + BC.stampSVG(e.name, s) + '</div>'
+               : '<div class="sello">' + BC.L('Lesson ' + e.n, e.n + '과') + '<br>' + e.name + '</div>';
+    }).join('');
+  }
+  document.querySelectorAll('[data-char]').forEach(img => img.src = BC.charSrc(img.dataset.char));
+  BC.mountToggle(render);
+  render();
 </script>
 </body>
 </html>

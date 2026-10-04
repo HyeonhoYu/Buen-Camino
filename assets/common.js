@@ -1,5 +1,33 @@
 // Buen Camino 공용 기능: 진도 저장, 스페인어 음성, 음성 인식
 const BC = (() => {
+  // 캐릭터 그림: 새 그림으로 바꿀 때는 같은 이름으로 덮어쓰거나 여기 파일 이름만 바꾸면 된다 (예: 'lucia.webp')
+  const CHARS = { lucia: 'lucia.svg', ramon: 'ramon.svg', begona: 'begona.svg' };
+  const charSrc = (who, base = '') => `${base}assets/chars/${CHARS[who]}`;
+  const charImg = (who, base = '') => `<img src="${charSrc(who, base)}" alt="" width="120" height="120">`;
+  // 언어: 기본 영어, 한국어 전환 가능
+  const LKEY = 'buencamino:lang';
+  const getLang = () => { try { return localStorage.getItem(LKEY) === 'ko' ? 'ko' : 'en'; } catch (e) { return 'en'; } };
+  const setLang = l => { try { localStorage.setItem(LKEY, l); } catch (e) {} };
+  const L = (en, ko) => getLang() === 'ko' ? ko : en;
+  function applyI18n(dict) {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
+      const k = el.dataset.i18n;
+      el.innerHTML = getLang() === 'ko' && dict[k] !== undefined ? dict[k] : el.dataset.en;
+    });
+  }
+  function mountToggle(onChange) {
+    const b = document.getElementById('lang');
+    const paint = () => {
+      const ko = getLang() === 'ko';
+      b.textContent = ko ? 'English' : '한국어';
+      b.setAttribute('lang', ko ? 'en' : 'ko');
+      b.setAttribute('aria-label', ko ? 'Switch to English' : '한국어로 보기');
+      document.documentElement.lang = getLang();
+    };
+    paint();
+    b.onclick = () => { setLang(getLang() === 'ko' ? 'en' : 'ko'); paint(); onChange(); };
+  }
   const KEY = 'buencamino:v1';
   const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || { stamps: {} }; } catch (e) { return { stamps: {} }; } };
   const save = d => { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} };
@@ -45,7 +73,7 @@ const BC = (() => {
   // 도장 그림: 이름과 받은 걸음(1~3) 표시
   function stampSVG(name, stars) {
     const dots = [0, 1, 2].map(i => `<circle cx="${38 + i * 12}" cy="66" r="4" fill="${i < stars ? '#8C2F4E' : 'none'}" stroke="#8C2F4E" stroke-width="1.5"/>`).join('');
-    return `<svg viewBox="0 0 100 100" role="img" aria-label="${name} 도장, 걸음 ${stars}개" style="transform:rotate(-8deg)">
+    return `<svg viewBox="0 0 100 100" role="img" aria-label="${L(name + ' stamp, ' + stars + ' of 3 steps', name + ' 도장, 걸음 ' + stars + '개')}" style="transform:rotate(-8deg)">
       <circle cx="50" cy="50" r="44" fill="none" stroke="#8C2F4E" stroke-width="3"/>
       <circle cx="50" cy="50" r="37" fill="none" stroke="#8C2F4E" stroke-width="1"/>
       <g transform="translate(50 38)" fill="none" stroke="#8C2F4E" stroke-width="1.6" stroke-linecap="round">
@@ -54,5 +82,5 @@ const BC = (() => {
       <text x="50" y="56" text-anchor="middle" font-family="Alegreya,serif" font-size="8.5" font-weight="700" fill="#8C2F4E">${name.toUpperCase()}</text>
       ${dots}</svg>`;
   }
-  return { getStamp, setStamp, speak, canListen, listen, norm, playIcon, stampSVG, hasVoice: () => !!voice };
+  return { charSrc, charImg, getLang, L, applyI18n, mountToggle, getStamp, setStamp, speak, canListen, listen, norm, playIcon, stampSVG, hasVoice: () => !!voice };
 })();
