@@ -4,7 +4,7 @@ const BC = (() => {
   const CHARS = { lucia: 'lucia.webp', ramon: 'ramon.webp', begona: 'begona.webp' };
   const FULL = { lucia: 'lucia-full.webp', ramon: 'ramon-full.webp', begona: 'begona-full.webp' };
   const charFull = (who, base = '') => `${base}assets/chars/${FULL[who]}`;
-  const charSrc = (who, base = '') => `${base}assets/chars/${CHARS[who]}`;
+  const charSrc = (who, base = '') => `${base}assets/chars/${CHARS[who]}?v=6`;
   const charImg = (who, base = '') => `<img src="${charSrc(who, base)}" alt="" width="120" height="120">`;
   // 언어: 기본 영어, 한국어 전환 가능
   const LKEY = 'buencamino:lang';
