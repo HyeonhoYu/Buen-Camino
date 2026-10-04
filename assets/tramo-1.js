@@ -26,7 +26,7 @@ function listPage() {
     <ol class="etapas">${TRAMO1.map(e => {
       const s = BC.getStamp('1-' + e.n);
       const status = s ? L(s + ' of 3 steps', '걸음 ' + s + '개') : (e.open ? L('Start', '시작하기') : L('Coming soon', '준비 중'));
-      const inner = `<span><span class="nm es">${e.n}. ${e.name}</span><br><span class="tp">${L(e.en, e.ko)}</span></span><span class="tag ${s ? 'open' : ''}">${status}</span>`;
+      const inner = `<span><span class="nm es">${e.n}. ${e.name}</span><br><span class="tp">${L(e.en, e.ko)}</span></span><span class="tag ${s || e.open ? 'open' : ''}">${status}</span>`;
       return `<li>${e.open ? `<a href="?etapa=${e.n}">${inner}</a>` : `<div class="locked">${inner}</div>`}</li>`;
     }).join('')}</ol>`;
 }
