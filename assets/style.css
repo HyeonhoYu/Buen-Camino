@@ -148,3 +148,9 @@ footer .links{display:flex;gap:1.2rem;flex-wrap:wrap}
 
 /* lesson pages: one centered column */
 #app{max-width:52rem;margin:0 auto;padding-bottom:2rem}
+.units{display:grid;grid-template-columns:repeat(auto-fill,minmax(6.5rem,1fr));gap:.6rem;margin:1rem 0}
+.unit{display:flex;flex-direction:column;gap:.35rem}
+.unit .vowel{width:100%}
+.ex-btn{background:#fff;border:2px solid var(--line);border-radius:10px;padding:.45rem .3rem;font-size:1.05rem;color:var(--muted);cursor:pointer}
+.ex-btn:hover{border-color:var(--camino);color:var(--camino)}
+#app + footer{max-width:52rem;margin:0 auto}
