@@ -21,12 +21,17 @@
 
   <main>
     <div class="hero">
+     <div class="hero-grid">
+      <div>
       <h1>Buen Camino</h1>
       <p class="sub" data-i18n="sub">Follow the yellow arrows one step at a time and learn the Spanish you will actually use in Spain.</p>
       <div class="actions">
         <a class="btn go" href="tramo-1/?etapa=1" data-i18n="start">Start walking</a>
         <a class="btn" href="tramo-1/" data-i18n="pick">Choose a stretch</a>
       </div>
+      </div>
+      <img class="trio" src="assets/chars/trio.webp" alt="Lucía the lynx, Ramón the donkey, and Begoña the stork" width="900" height="900" data-alt-ko="스라소니 루시아, 당나귀 라몬, 황새 베고냐">
+     </div>
       <div class="route"><svg viewBox="-50 0 1090 180" role="img" aria-label="The pilgrim route in seven stretches, from Roncesvalles to Santiago">
   <path d="M 50 110 Q 114 80 179 95 Q 243 130 307 120 Q 371 88 436 100 Q 500 122 564 100 Q 629 86 693 115 Q 757 124 821 90 Q 886 76 950 105" fill="none" stroke="#C9CCC3" stroke-width="10" stroke-linecap="round"/>
   <path d="M 50 110 Q 114 80 179 95 Q 243 130 307 120 Q 371 88 436 100 Q 500 122 564 100 Q 629 86 693 115 Q 757 124 821 90 Q 886 76 950 105" fill="none" stroke="#F2B705" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 14"/>
@@ -63,9 +68,9 @@
       <h2 id="t-friends" data-i18n="hFriends">Trail companions</h2>
       <p class="lead" data-i18n="leadFriends">Each friend's name hides one of the sounds you learn in the first stretch.</p>
       <div class="friends">
-        <div class="friend"><div class="avatar"><img src="assets/chars/lucia.svg" alt="" width="120" height="120" data-char="lucia"></div><div><h3 data-i18n="f1h"><span class="es">Lucía</span>, the Iberian lynx</h3><p data-i18n="f1p">Sharp ears, so she handles pronunciation. Her name has Spain's c sound and an accent mark.</p></div></div>
-        <div class="friend"><div class="avatar"><img src="assets/chars/ramon.svg" alt="" width="120" height="120" data-char="ramon"></div><div><h3 data-i18n="f2h"><span class="es">Ramón</span>, the donkey</h3><p data-i18n="f2p">Carries the packs and never hurries. When you miss something, he tells you why.</p></div></div>
-        <div class="friend"><div class="avatar"><img src="assets/chars/begona.svg" alt="" width="120" height="120" data-char="begona"></div><div><h3 data-i18n="f3h"><span class="es">Begoña</span>, the stork</h3><p data-i18n="f3p">Watches the trail from church bell towers and brings you stories about each region.</p></div></div>
+        <div class="friend"><img class="full" src="assets/chars/lucia-full.webp" alt="" data-full="lucia"><div><h3 data-i18n="f1h"><span class="es">Lucía</span>, the Iberian lynx</h3><p data-i18n="f1p">Sharp ears, so she handles pronunciation. Her name has Spain's c sound and an accent mark.</p></div></div>
+        <div class="friend"><img class="full" src="assets/chars/ramon-full.webp" alt="" data-full="ramon"><div><h3 data-i18n="f2h"><span class="es">Ramón</span>, the donkey</h3><p data-i18n="f2p">Carries the packs and never hurries. When you miss something, he tells you why.</p></div></div>
+        <div class="friend"><img class="full" src="assets/chars/begona-full.webp" alt="" data-full="begona"><div><h3 data-i18n="f3h"><span class="es">Begoña</span>, the stork</h3><p data-i18n="f3p">Watches the trail from church bell towers and brings you stories about each region.</p></div></div>
       </div>
     </section>
 
@@ -162,6 +167,9 @@
 };
   function render() {
     BC.applyI18n(KO);
+    const trio = document.querySelector('.trio');
+    if (!trio.dataset.altEn) trio.dataset.altEn = trio.alt;
+    trio.alt = BC.L(trio.dataset.altEn, trio.dataset.altKo);
     document.title = BC.L('Buen Camino: Spanish on the Way of St. James', 'Buen Camino - 순례길에서 배우는 스페인어');
     document.getElementById('sellos').innerHTML = TRAMO1.map(e => {
       const s = BC.getStamp('1-' + e.n);
@@ -169,7 +177,7 @@
                : '<div class="sello">' + BC.L('Lesson ' + e.n, e.n + '과') + '<br>' + e.name + '</div>';
     }).join('');
   }
-  document.querySelectorAll('[data-char]').forEach(img => img.src = BC.charSrc(img.dataset.char));
+  document.querySelectorAll('[data-full]').forEach(img => img.src = BC.charFull(img.dataset.full));
   BC.mountToggle(render);
   render();
 </script>

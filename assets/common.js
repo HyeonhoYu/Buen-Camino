@@ -1,7 +1,9 @@
 // Buen Camino 공용 기능: 진도 저장, 스페인어 음성, 음성 인식
 const BC = (() => {
-  // 캐릭터 그림: 새 그림으로 바꿀 때는 같은 이름으로 덮어쓰거나 여기 파일 이름만 바꾸면 된다 (예: 'lucia.webp')
-  const CHARS = { lucia: 'lucia.svg', ramon: 'ramon.svg', begona: 'begona.svg' };
+  // 캐릭터 그림: 얼굴(원형, 말풍선용)과 전신(첫 화면 길동무용). 새 그림은 같은 이름으로 덮어쓰거나 여기 파일 이름만 바꾸면 된다
+  const CHARS = { lucia: 'lucia.webp', ramon: 'ramon.webp', begona: 'begona.webp' };
+  const FULL = { lucia: 'lucia-full.webp', ramon: 'ramon-full.webp', begona: 'begona-full.webp' };
+  const charFull = (who, base = '') => `${base}assets/chars/${FULL[who]}`;
   const charSrc = (who, base = '') => `${base}assets/chars/${CHARS[who]}`;
   const charImg = (who, base = '') => `<img src="${charSrc(who, base)}" alt="" width="120" height="120">`;
   // 언어: 기본 영어, 한국어 전환 가능
@@ -82,5 +84,5 @@ const BC = (() => {
       <text x="50" y="56" text-anchor="middle" font-family="Alegreya,serif" font-size="8.5" font-weight="700" fill="#8C2F4E">${name.toUpperCase()}</text>
       ${dots}</svg>`;
   }
-  return { charSrc, charImg, getLang, L, applyI18n, mountToggle, getStamp, setStamp, speak, canListen, listen, norm, playIcon, stampSVG, hasVoice: () => !!voice };
+  return { charFull, charSrc, charImg, getLang, L, applyI18n, mountToggle, getStamp, setStamp, speak, canListen, listen, norm, playIcon, stampSVG, hasVoice: () => !!voice };
 })();

@@ -16,4 +16,4 @@
 저장소 루트에 이 폴더 내용을 올리고 Settings > Pages에서 main 브랜치를 선택.
 
 ## 캐릭터 그림 바꾸기
-`assets/chars/`의 lucia.svg, ramon.svg, begona.svg가 기본 그림이다. 새 그림을 같은 이름으로 덮어쓰거나, 형식이 다르면(예: webp) `assets/common.js` 맨 위의 `CHARS` 목록에서 파일 이름만 바꾸면 첫 화면과 수업 화면에 모두 반영된다. 정사각형, 원형으로 잘려도 괜찮은 구도가 좋다.
+`assets/chars/`에 얼굴 그림(lucia.webp, ramon.webp, begona.webp, 원형 말풍선용), 전신 그림(*-full.webp, 첫 화면 길동무용), 세 친구 단체 그림(trio.webp, 첫 화면 맨 위)이 있다. 배경은 투명 처리되어 있다. 새 그림을 같은 이름으로 덮어쓰거나, 형식이 다르면(예: webp) `assets/common.js` 맨 위의 `CHARS` 목록에서 파일 이름만 바꾸면 첫 화면과 수업 화면에 모두 반영된다. 정사각형, 원형으로 잘려도 괜찮은 구도가 좋다.

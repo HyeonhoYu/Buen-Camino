@@ -55,8 +55,9 @@ h2{font:700 clamp(1.7rem,4vw,2.3rem)/1.2 var(--serif);margin:0 0 .4rem}
 .room h3{margin:0 0 .3rem;font:600 1.2rem/1.3 var(--serif)}
 .room p{margin:0;color:var(--muted);font-size:.97rem}
 
-.friends{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.4rem}
-.friend{display:flex;gap:1rem;align-items:flex-start}
+.friends{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.6rem}
+.friend{display:flex;flex-direction:column;gap:.6rem}
+.friend .full{display:block;height:13rem;width:auto;max-width:100%;object-fit:contain;object-position:left bottom}
 .avatar{flex:0 0 auto;width:5rem;height:5rem;border-radius:50%;overflow:hidden}
 .avatar img{display:block;width:100%;height:100%}
 .friend h3{margin:0;font:600 1.15rem/1.3 var(--serif)}
@@ -84,7 +85,7 @@ footer{padding:2.5rem 0 3rem;color:var(--muted);font-size:.9rem}
 .panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:1.5rem;max-width:44rem}
 .panel h2{font-size:1.6rem}
 .say{display:flex;gap:.7rem;align-items:flex-start;background:var(--camino-soft);border-radius:12px;padding:.9rem 1rem;margin:1rem 0}
-.say .avatar{width:3.2rem;height:3.2rem;box-shadow:0 0 0 2px #fff}
+.say .avatar{width:4rem;height:4rem;box-shadow:0 0 0 2px #fff}
 .say p{margin:0}
 .vowels{display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin:1rem 0}
 .vowel{background:#fff;border:2px solid var(--line);border-radius:12px;padding:.8rem .3rem;text-align:center;cursor:pointer;font:inherit;color:inherit}
@@ -134,4 +135,9 @@ footer{padding:2.5rem 0 3rem;color:var(--muted);font-size:.9rem}
 footer a{color:var(--muted)}
 footer .links{display:flex;gap:1.2rem;flex-wrap:wrap}
 @media (max-width:520px){.coffee{grid-template-columns:1fr}}
-.friend .avatar{width:6.5rem;height:6.5rem}
+
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1.5rem;align-items:end}
+.trio{display:block;width:100%;max-width:26rem;height:auto;justify-self:end}
+@media (max-width:760px){.hero-grid{grid-template-columns:1fr}.trio{max-width:20rem;justify-self:center}}
+.brand{white-space:nowrap}
+@media (max-width:520px){.top nav{display:none}}
