@@ -44,9 +44,11 @@ if (!etapa || !info || !info.open || !LESSONS[etapa]) {
 /* 수업 진행: 내용은 tramo-1-lessons.js */
 const LS = LESSONS[etapa];
 const T = pair => L(pair[0], pair[1]);
-const STEPS = [['Listen', '소리 듣기'], ['Pick the letter', '글자 고르기'], ['Say it', '따라 말하기'], LS.fillTitle, ['Get your stamp', '도장 받기']];
+const STEPS = [['Listen', '소리 듣기'], LS.chooseTitle || ['Pick the letter', '글자 고르기'], ['Say it', '따라 말하기'], LS.fillTitle, ['Get your stamp', '도장 받기']];
 const TOTAL = LS.choose.length + LS.fill.length;
-const tipOf = letter => (LS.units.find(u => u.l === letter) || LESSONS[1].units.find(u => u.l === letter) || { tip: ['', ''] }).tip;
+const ALLUNITS = [LS, ...Object.values(LESSONS)].flatMap(x => x.units);
+const tipOf = letter => (ALLUNITS.find(u => (u.k || u.l) === letter) || { tip: ['', ''] }).tip;
+const G = LS.guide || 'ramon';
 let step = 0, score = 0, scoreAtStep = 0;
 
 const warn = () => `<p class="feedback no voice-warn">${L('No Spain Spanish voice was found on this device. Add Spanish (Spain) in your system speech settings, or open the page on your phone.', '이 기기에서 스페인어 음성을 찾지 못했어요. 시스템 설정의 음성 항목에서 스페인어(스페인)를 추가하거나 휴대전화로 열어 보세요.')}</p>`;
@@ -62,7 +64,7 @@ function frame(inner) {
   app.innerHTML = `<p style="margin:1.2rem 0 0"><a href="./">${L('First stretch', '첫째 구간')}</a></p>
     <h2 class="es" style="margin:.2rem 0 0;font-size:2.4rem;color:var(--camino)">${info.n}. ${info.name}</h2>
     <p class="lead" style="margin:0">${L(info.en, info.ko)}</p>
-    <ol class="steps">${STEPS.map((s, i) => `<li class="${i === step ? 'now' : i < step ? 'done' : ''}">${i + 1}. ${T(s)}</li>`).join('')}</ol>
+    <ol class="steps">${STEPS.map((s, i) => `<li class="${i === step ? 'now' : i < step ? 'done' : ''}">${i + 1}<span>. ${T(s)}</span></li>`).join('')}</ol>
     <div class="panel">${noVoice ? warn() : ''}${inner}</div>`;
 }
 const go = n => { step = n; scoreAtStep = score; window.scrollTo(0, 0); [listenStep, chooseStep, speakStep, fillStep, stampStep][n](); };
@@ -70,10 +72,10 @@ const go = n => { step = n; scoreAtStep = score; window.scrollTo(0, 0); [listenS
 /* 1. 소리 듣기 */
 function listenStep() {
   frame(`<h2>${L('Listen', '소리 듣기')}</h2>
-    ${friend('ramon', T(LS.intro))}
-    <div class="units">${LS.units.map(u => `<div class="unit"><button class="vowel" data-say="${u.say}" aria-label="${u.l}, ${esc(T(u.s))}"><span class="big">${u.l}</span><span class="ko">${T(u.s)}</span></button><button class="ex-btn es" data-say="${u.ex}">${u.ex}</button></div>`).join('')}</div>
-    ${friend('ramon', T(LS.tip))}
-    <div class="nav-bottom"><span></span><button class="btn go" id="next">${L('On to picking letters', '글자 고르기로')}</button></div>`);
+    ${friend(G, T(LS.intro))}
+    <div class="units" style="--cols:${Math.ceil(LS.units.length / Math.ceil(LS.units.length / 6))}">${LS.units.map(u => `<div class="unit"><button class="vowel" data-say="${u.say}" aria-label="${u.l}, ${esc(T(u.s))}"><span class="big"${u.l.length > 2 ? ' style="font-size:1.7rem;padding:.45rem 0"' : ''}>${u.l}</span><span class="ko">${T(u.s)}</span></button><button class="ex-btn es" data-say="${u.ex}">${u.ex}</button></div>`).join('')}</div>
+    ${friend(G, T(LS.tip))}
+    <div class="nav-bottom"><span></span><button class="btn go" id="next">${L('On to the next step', '다음 단계로')}</button></div>`);
   document.getElementById('next').onclick = () => go(1);
 }
 
@@ -82,8 +84,8 @@ function chooseStep() {
   let i = 0;
   const render = () => {
     const q = LS.choose[i]; let tried = false;
-    frame(`<h2>${L('Pick the letter', '글자 고르기')} ${small(`${i + 1} / ${LS.choose.length}`)}</h2>
-      <p>${L('Listen, then pick what you heard.', '소리를 듣고 맞는 글자를 골라요.')}</p>
+    frame(`<h2>${T(STEPS[1])} ${small(`${i + 1} / ${LS.choose.length}`)}</h2>
+      <p>${LS.chooseTitle && etapa === 7 ? L('Listen for the stressed syllable, then pick the right spelling.', '어느 음절에 힘이 있는지 듣고 맞는 철자를 골라요.') : L('Listen, then pick what you heard.', '소리를 듣고 맞는 것을 골라요.')}</p>
       ${playBtn(q.say, L('Listen again', '다시 듣기'))}
       <div class="choices">${q.opts.map(o => `<button class="choice" data-o="${o}">${o}</button>`).join('')}</div>
       <div class="feedback" id="fb" aria-live="polite"></div>
@@ -119,7 +121,7 @@ function speakStep() {
     ${LS.speak.map((s, k) => `<div class="speak-item"><span class="es">${s.w}</span><small>${T(s.m)}. ${T(s.n)}</small>
       <div class="row" style="margin-top:.5rem">${playBtn(s.w)}${can ? `<button class="btn small" data-mic="${k}">${L('Speak', '말하기')}</button>` : ''}</div>
       <div class="result" id="r${k}" aria-live="polite"></div></div>`).join('')}
-    <div class="nav-bottom"><button class="btn" id="prev">${L('Back to picking letters', '글자 고르기 다시')}</button><button class="btn go" id="next">${L('On to the next step', '다음 단계로')}</button></div>`);
+    <div class="nav-bottom"><button class="btn" id="prev">${L('Back one step', '이전 단계로')}</button><button class="btn go" id="next">${L('On to the next step', '다음 단계로')}</button></div>`);
   app.querySelectorAll('[data-mic]').forEach(b => b.onclick = async () => {
     const k = +b.dataset.mic, out = document.getElementById('r' + k), target = BC.norm(LS.speak[k].w);
     out.textContent = L('Listening. Go ahead.', '듣고 있어요. 말해 보세요.'); out.className = 'result';
@@ -147,7 +149,7 @@ function fillStep() {
   const render = () => {
     const q = LS.fill[i]; let tried = false; let filled = [];
     const blanks = [...q.t].filter(c => c === '_').length;
-    const answer = [...q.w].filter((c, k) => q.t[k] === '_');
+    const answer = q.a || [...q.w].filter((c, k) => q.t[k] === '_');
     const draw = () => {
       let b = 0;
       document.getElementById('word').innerHTML = [...q.t].map(c => c === '_' ? `<span class="blank">${filled[b++] || '&nbsp;'}</span>` : c).join('');
@@ -198,6 +200,7 @@ function stampStep() {
     <div style="max-width:11rem;margin:.5rem auto 1rem">${BC.stampSVG(info.name, stars)}</div>
     <p style="text-align:center">${L(`You got ${score} of ${TOTAL} right on the first try and earned ${stars} of 3 steps.${stars < 3 ? ' Walk it again tomorrow to earn all three.' : ''}`,
       `${TOTAL}문제 중 ${score}문제를 한 번에 맞혀서 걸음 ${stars}개를 받았어요.${stars < 3 ? ' 내일 다시 걸으면 세 개를 받을 수 있어요.' : ''}`)}</p>
+    ${LS.final ? `<p class="feedback ok" style="text-align:center">${L('You have finished the first stretch, Roncesvalles to Pamplona.', '첫째 구간, 론세스바예스에서 팜플로나까지를 모두 걸었어요.')}</p>` : ''}
     ${friend('begona', T(LS.note))}
     <h3 style="font:600 1.15rem var(--serif);margin:1.2rem 0 0">${L('Words from today', '오늘 만난 말')}</h3>
     <ul class="words">${LS.today.map(k => LS.speak[k]).map(s => `<li><span class="es" style="font-size:1.2rem">${s.w}</span> ${T(s.m)} ${playBtn(s.w)}</li>`).join('')}</ul>

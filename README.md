@@ -17,3 +17,10 @@
 
 ## 캐릭터 그림 바꾸기
 `assets/chars/`에 얼굴 그림(lucia.webp, ramon.webp, begona.webp, 원형 말풍선용), 전신 그림(*-full.webp, 첫 화면 길동무용), 세 친구 단체 그림(trio.webp, 첫 화면 맨 위)이 있다. 배경은 투명 처리되어 있다. 새 그림을 같은 이름으로 덮어쓰거나, 형식이 다르면(예: webp) `assets/common.js` 맨 위의 `CHARS` 목록에서 파일 이름만 바꾸면 첫 화면과 수업 화면에 모두 반영된다. 정사각형, 원형으로 잘려도 괜찮은 구도가 좋다.
+
+## 파비콘
+루트의 favicon.svg(기본), favicon-32.png, favicon.ico, apple-touch-icon.png. 순례길 표지처럼 파란 바탕에 노란 가리비.
+
+## 첫째 구간 수업 (1과~8과)
+1 Roncesvalles 모음 / 2 Burguete 자음, f, b=v / 3 Espinal c, z, d / 4 Viscarret g, j / 5 Zubiri r, rr / 6 Larrasoaña ñ, ll, y, ch, qu, h / 7 Villava 강세와 악센트 / 8 Pamplona 종합.
+내용은 assets/tramo-1-lessons.js. 채우기 문제에서 rr, ll 같은 두 글자 답은 a: ['rr'] 처럼 직접 적는다.
