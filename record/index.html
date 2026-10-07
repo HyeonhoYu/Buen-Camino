@@ -22,21 +22,18 @@
     <p class="lead">사이트에서 들리는 스페인어 소리를 하나씩 녹음해요. 목록은 구간과 과 순서로 나오고, 아직 녹음하지 않은 첫 말에서 시작해요. 녹음은 이 브라우저에 저장되니 여러 번에 나눠서 해도 되고, 일부만 올려도 돼요. 녹음이 없는 말은 기기 음성으로 대신 나와요.</p>
     <ul class="rec-tips">
       <li>사람 목소리로 녹음해도 되고 AI 목소리로 채워도 돼요. AI로 저장한 말도 나중에 녹음하면 사람 목소리로 바뀌어요.</li>
-      <li>앞뒤 빈 소리와 음량은 도구가 자동으로 맞춰요. 처음부터 끝까지 한 목소리, 같은 속도로 맞추는 것이 좋아요.</li>
       <li>1구간의 소리 카드(a, ma, ca co cu 같은 것)는 글자 이름이 아니라 소리예요. AI에게도 그렇게 전해요.</li>
+      <li>AI 목소리는 저장하기 전에 꼭 들어 보세요. 가끔 지시문을 소리 내어 읽거나 딴말을 해서 소리가 길어져요. 도구가 길이를 재서 걸러 내지만, 귀로 확인하는 것이 가장 확실해요.</li>
+      <li>처음부터 끝까지 한 목소리, 같은 빠르기로 맞추는 것이 좋아요. 앞뒤 빈 소리와 음량은 도구가 자동으로 맞춰요.</li>
       <li>단축키: <kbd>스페이스</kbd> 녹음 시작과 끝, <kbd>P</kbd> 다시 듣기, <kbd>→</kbd> 다음, <kbd>←</kbd> 이전, <kbd>A</kbd> AI 목소리 만들기, <kbd>S</kbd> AI 목소리 저장</li>
     </ul>
 
     <section class="panel rec-ai" aria-labelledby="t-ai">
       <h2 id="t-ai">AI 목소리 설정</h2>
       <div class="rec-grid">
-        <label>Gemini API 키
+        <label class="wide">Gemini API 키
           <span class="row"><input id="key" type="password" autocomplete="off" spellcheck="false" placeholder="키를 붙여 넣어요"><button class="btn small go" id="keySave">저장</button><button class="btn small" id="keyClear">키 지우기</button></span>
           <small id="keyState"></small>
-        </label>
-        <label>모델
-          <select id="model"></select>
-          <small>모델마다 하루 한도와 분당 한도가 따로 있어요. 한 모델이 하루 한도에 걸리면 다른 모델로 바꾸고 이어서 채우면 돼요. 한도는 태평양 시간 자정(인디애나 새벽 3시쯤)에 다시 채워져요.</small>
         </label>
         <label>목소리
           <span class="row"><select id="voice"></select><button class="btn small" id="preview">들어 보기</button></span>
@@ -45,13 +42,17 @@
         <label>빠르기
           <select id="speed"><option value="slow">천천히</option><option value="bitslow" selected>조금 천천히</option><option value="normal">보통</option></select>
         </label>
+        <label class="wide">모델
+          <select id="model"></select>
+          <small>모델마다 하루 한도와 분당 한도가 따로 있어요. 채우는 중에 한 모델이 하루 한도에 걸리면 다른 모델로 넘어가요. 한도는 태평양 시간 자정(인디애나 새벽 3시쯤)에 다시 채워져요.</small>
+        </label>
+        <label class="check"><input type="checkbox" id="castilian" checked> 스페인 표준 발음(마드리드 억양)으로</label>
         <label class="check"><input type="checkbox" id="hints" checked> 말마다 말투 안내(소리, 음절, 질문 등)도 AI에게 전하기</label>
-        <label class="check"><input type="checkbox" id="castilian" checked> 스페인 표준 발음으로 (z와 ce, ci를 th로)</label>
       </div>
       <details class="rec-help"><summary>API 키 받는 법 (한 번만)</summary>
         <ol>
           <li><code>aistudio.google.com</code>에 Google 계정으로 로그인해요.</li>
-          <li>Get API key를 누르고 Create API key로 키를 만들어요. 달토끼 녹음실에서 쓰던 키를 그대로 써도 돼요.</li>
+          <li>Get API key를 누르고 Create API key로 키를 만들어요. 달토끼나 Pai Thiao 녹음실에서 쓰던 키를 그대로 써도 돼요.</li>
           <li>많이 만들 때는 무료 한도에 금방 걸릴 수 있어요. 그럴 때는 같은 화면에서 결제(유료 등급)를 켜면 돼요. 한도에 걸리면 도구가 잠깐 기다렸다가 다시 시도해요.</li>
           <li>키를 위 칸에 붙여 넣고 저장해요. 키는 이 브라우저에만 남고, 코드나 저장소, 내려받는 zip에는 들어가지 않아요.</li>
         </ol>
@@ -62,12 +63,12 @@
       <div class="row" style="justify-content:space-between">
         <strong id="count"></strong>
         <span class="row">
-          <select id="filter"><option value="all">전체</option><option value="todo" selected>아직 안 한 것</option><option value="ai">AI로 한 것</option><option value="mic">녹음한 것</option><option value="long">너무 긴 AI 소리</option></select>
-          <select id="stretch"></select>
+          <select id="filter" aria-label="상태"><option value="all">전체</option><option value="todo" selected>아직 안 한 것</option><option value="ai">AI로 한 것</option><option value="mic">녹음한 것</option><option value="check">들어 보고 확인할 것</option><option value="long">너무 긴 AI 소리</option></select>
+          <select id="stretch" aria-label="구간"></select>
         </span>
       </div>
       <div class="rec-bar"><span id="barMic"></span><span id="barAi"></span><span id="barPub"></span></div>
-      <small class="legend"><i class="mic"></i>녹음 <i class="ai"></i>AI <i class="pub"></i>이미 사이트에 올라간 것 <i class="long"></i>너무 긴 AI 소리</small>
+      <small class="legend"><i class="mic"></i>녹음 <i class="ai"></i>AI <i class="pub"></i>이미 사이트에 올라간 것 <i class="check"></i>들어 보고 확인할 것 <i class="long"></i>너무 긴 AI 소리</small>
       <div class="row" style="margin-top:.6rem"><button class="btn small" id="purge" hidden></button></div>
     </section>
 
@@ -83,6 +84,7 @@
         <button class="btn" id="aiMake">AI 목소리 만들기</button>
         <button class="btn" id="aiSave" disabled>AI 목소리 저장</button>
         <button class="btn" id="del">지우기</button>
+        <button class="btn go" id="okCheck" hidden>확인했어요</button>
       </div>
       <div class="rec-meter" aria-hidden="true"><span id="meter"></span></div>
       <p class="feedback" id="msg"></p>
@@ -91,18 +93,18 @@
 
     <section class="panel rec-batch">
       <h2>남은 말 AI로 한꺼번에 채우기</h2>
-      <p>지금 고른 목소리와 모델로, 아직 녹음도 AI도 없는 말을 차례로 만들어 저장해요. 만든 소리가 말에 비해 너무 길면(AI가 지시문을 읽은 경우) 저장하지 않고 다시 만들고, 세 번 모두 길면 그 말은 건너뛰어요. 분당 한도에 맞춰 천천히 진행하고, 하루 한도에 걸리면 멈춰요. 중간에 멈춰도 만든 것은 남아요.</p>
+      <p>위에서 고른 구간 안에서, 아직 녹음도 AI도 없는 말을 차례로 만들어 저장해요. 만든 소리가 말에 비해 너무 길면(AI가 지시문을 읽은 경우) 모델과 지시문을 바꿔 가며 여섯 번까지 다시 만들어요. 그래도 길면 마지막 말만 잘라 내서 저장하고 "들어 보고 확인할 것"으로 표시해요. 한 모델이 하루 한도에 걸리면 다른 모델로 넘어가요. 분당 한도에 맞춰 천천히 진행하고, 모든 모델이 하루 한도에 걸리면 멈춰요. 중간에 멈춰도 만든 것은 남아요. 다 채운 뒤 몇 개를 골라 들어 보고, 이상한 것만 다시 만들면 돼요.</p>
       <div class="row"><button class="btn go" id="batch">채우기 시작</button><button class="btn" id="batchStop" disabled>멈추기</button><span id="batchMsg"></span></div>
     </section>
 
     <section class="panel rec-export">
       <h2>사이트에 올리기</h2>
-      <p>zip을 내려받아 저장소 맨 위(index.html이 있는 곳)에 풀면 <code>assets/audio/</code> 폴더에 소리 파일과 <code>manifest.js</code>가 들어가요. 이미 사이트에 올라간 소리 목록도 manifest에 함께 들어가니, 이번에 만든 것만 있어도 괜찮아요. 올린 뒤 몇 분 지나 새로고침하면 사이트에서 녹음한 소리가 나와요.</p>
+      <p>zip을 내려받아 저장소 맨 위(index.html이 있는 곳)에 풀면 <code>assets/audio/</code> 폴더에 소리 파일과 <code>manifest.js</code>가 들어가요. 이미 사이트에 올라간 소리 목록도 manifest에 함께 들어가니, 이번에 만든 것만 있어도 괜찮아요. 너무 긴 AI 소리는 zip에 넣지 않아요. 올린 뒤 몇 분 지나 새로고침하면 사이트에서 녹음한 소리가 나와요.</p>
       <div class="row"><button class="btn go" id="export">zip 내려받기</button><span id="exportMsg"></span></div>
     </section>
 
     <section class="rec-list-wrap">
-      <h2>전체 목록</h2>
+      <h2>목록 <small class="muted" id="listNote"></small></h2>
       <ol class="rec-list" id="list"></ol>
     </section>
   </main>

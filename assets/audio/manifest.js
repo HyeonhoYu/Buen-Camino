@@ -1,6 +1,6 @@
-// Buen Camino 녹음실에서 만든 파일 (2026. 10. 6. 오후 11:42:14). 손으로 고치지 않아도 돼요.
-// 2026-10-07: 지시문을 읽어 30초 넘게 길어진 AI 소리 197개를 목록에서 뺐다.
+// Buen Camino 녹음실에서 만든 파일. 2026-10-07에 이상하게 긴 AI 소리 196개를 목록에서 뺐어요. 손으로 고치지 않아도 돼요.
 window.BC_AUDIO = {
+ "a": "assets/audio/es/a-1r9wi7g.mp3",
  "amarillo": "assets/audio/es/amarillo-zxdq4w.mp3",
  "aquí tiene": "assets/audio/es/aqui-tiene-13ydhxi.mp3",
  "aquí tiene diez euros": "assets/audio/es/aqui-tiene-diez-euros-1mxp530.mp3",
