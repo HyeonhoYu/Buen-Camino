@@ -34,3 +34,5 @@ kbd{font:600 .8rem var(--sans);background:#fff;border:1px solid var(--line);bord
 .rec-list .dot.mic{background:var(--camino)}.rec-list .dot.ai{background:var(--flecha)}.rec-list .dot.pub{background:#7FA58E}
 .rec-list .es{font-size:1.05rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (max-width:640px){.rec-grid{grid-template-columns:1fr}}
+
+.legend .long,.rec-list .dot.long{background:#A63D2F}.tag.long{background:#A63D2F;color:#fff}

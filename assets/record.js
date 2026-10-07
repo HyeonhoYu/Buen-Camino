@@ -22,6 +22,18 @@ function guessKind(text, origin) {
   return text.includes(' ') ? 'phrase' : 'word';
 }
 const KIND_KO = { sound: '소리 하나: 글자 이름이 아니라 소리로', syllables: '음절 여러 개: 하나씩 짧게 끊어서', word: '낱말 하나: 또렷하게', phrase: '문장: 자연스럽게', question: '질문: 묻는 억양으로' };
+// AI에게 주는 말투 안내. 지시문이 길면 Gemini가 지시문까지 소리 내어 읽어 버리므로 아주 짧게 둔다.
+const KIND_EN = {
+  sound: 'only this Spanish sound as heard inside a word, not the letter name',
+  syllables: 'these Spanish syllables one by one, with a short pause between them',
+  word: 'this Spanish word clearly, like a teacher',
+  phrase: 'this Spanish phrase naturally',
+  question: 'this Spanish question with question intonation'
+};
+// 기대 길이: 음절 수로 어림한다. 이보다 훨씬 길면 AI가 지시문을 읽었거나 딴말을 한 것이다.
+const syllables = t => Math.max(1, (t.toLowerCase().match(/[aeiouáéíóúü]+/g) || []).length);
+const maxDur = t => 1.6 + 0.6 * syllables(t);
+const tooLong = c => c && c.source === 'ai' && c.dur > maxDur(c.text);
 function collect() {
   const map = new Map();
   const add = (text, ctx, origin) => {
@@ -172,27 +184,30 @@ async function toggleRec() {
 
 /* ---------- Gemini AI 목소리 ---------- */
 const API = 'https://generativelanguage.googleapis.com/v1beta';
-// 안내문이 길면 AI가 안내문까지 소리 내어 읽어 버린다. 그래서 "Say ...: 말" 한 줄로만 보낸다.
-const PACE = { slow: 'slowly', bitslow: 'a little slowly', normal: 'naturally' };
-const HOW = { sound: ', only the sound, not the letter name', syllables: ', one syllable at a time', word: '', phrase: '', question: ', as a question' };
+const SPEED = { slow: 'slowly and very clearly', bitslow: 'a little slowly and clearly', normal: 'at a natural pace' };
+// Gemini TTS 권장 형식: "말투 안내: 읽을 말". 콜론 뒤만 읽도록 짧게 쓴다. simple은 다시 시도할 때 쓰는 가장 짧은 형식.
 function prompt(it, opts = {}) {
-  const accent = $('castilian').checked ? 'in a Castilian Spanish accent from Madrid' : 'in clear Spanish';
-  const how = $('hints').checked && !opts.preview ? (HOW[it.kind] || '') : '';
-  return `Say ${PACE[$('speed').value] || 'slowly'}, ${accent}${how}: ${it.text}`;
+  const accent = $('castilian').checked ? 'in Castilian Spanish from Madrid (z and ce, ci like English th)' : 'in clear neutral Spanish';
+  if (opts.simple) return `Say ${accent}: ${it.text}`;
+  const what = $('hints').checked && !opts.preview ? KIND_EN[it.kind] : 'this';
+  return `Say ${what}, ${SPEED[$('speed').value]}, ${accent}: ${it.text}`;
 }
-// 말 길이로 본 소리 길이의 한계. 천천히 말해도 넉넉히 들어가게 잡았다 (adiós 2.7초, a, e, i, o, u 7초쯤).
-function maxDur(text) {
-  const n = [...text].length, commas = (text.match(/,/g) || []).length;
-  return (1.2 + 0.12 * n + 0.5 * commas) * 1.5;
-}
-const MIN_DUR = 0.2;
-const isOdd = (text, dur) => dur > maxDur(text) || dur < MIN_DUR;
 function parseRetry(err) {
   const d = (err && err.details || []).find(x => x['@type'] && x['@type'].includes('RetryInfo'));
   const s = d && d.retryDelay ? parseFloat(d.retryDelay) : NaN;
   return isNaN(s) ? 20 : Math.ceil(s) + 1;
 }
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+// 길이를 보고 이상하면 가장 짧은 지시문으로 두 번 더 만든다. 그래도 길면 저장하지 않는다.
+async function synth(it, opts = {}) {
+  if (opts.preview) return synthOnce(it, opts);
+  for (let k = 0; k < 3; k++) {
+    const out = await synthOnce(it, { ...opts, simple: k > 0 });
+    if (out.dur <= maxDur(it.text)) return out;
+    msg(`AI 소리가 ${out.dur.toFixed(1)}초로 너무 길어요(지시문을 읽은 것 같아요). 다시 만들어요...`);
+  }
+  const e = new Error(`"${it.text}"는 세 번 만들어도 소리가 너무 길었어요. 이 말은 건너뛰어요. 직접 녹음하거나 나중에 다시 해 보세요.`); e.tooLong = true; throw e;
+}
 async function synthOnce(it, opts = {}) {
   const key = settings.key;
   if (!key) throw new Error('먼저 위에서 Gemini API 키를 저장해 주세요.');
@@ -225,19 +240,6 @@ async function synthOnce(it, opts = {}) {
   }
   throw new Error('여러 번 시도했지만 실패했어요. 잠시 뒤 다시 해 주세요.');
 }
-// 만든 소리가 말 길이에 비해 지나치게 길거나 짧으면 버리고 다시 만든다. 세 번 다 이상하면 건너뛴다.
-async function synth(it, opts = {}) {
-  if (opts.preview) return synthOnce(it, opts);
-  let last = 0;
-  for (let t = 0; t < 3; t++) {
-    if (t) { msg(`AI가 엉뚱하게 ${last.toFixed(0)}초짜리 소리를 만들어서 다시 만들어요 (${t + 1}/3)...`); await sleep(6500); }
-    const out = await synthOnce(it, opts);
-    if (!isOdd(it.text, out.dur)) return out;
-    last = out.dur;
-  }
-  const e = new Error(`AI가 세 번 모두 이상한 소리를 만들었어요 (${last.toFixed(1)}초). 이 말은 건너뛰어요. 모델이나 목소리를 바꿔 보세요.`);
-  e.odd = true; throw e;
-}
 async function loadModels() {
   const sel = $('model'); let list = [];
   if (settings.key) {
@@ -262,11 +264,12 @@ const view = () => ITEMS.filter(it => {
   if (f === 'todo') return !c && !PUB[it.key];
   if (f === 'ai') return c && c.source === 'ai';
   if (f === 'mic') return c && c.source === 'mic';
+  if (f === 'long') return tooLong(c);
   return true;
 });
 let VIEW = [];
 const cur = () => VIEW[idx] || ITEMS[0];
-const stateOf = it => CLIPS[it.key] ? CLIPS[it.key].source : PUB[it.key] ? 'pub' : '';
+const stateOf = it => tooLong(CLIPS[it.key]) ? 'long' : CLIPS[it.key] ? CLIPS[it.key].source : PUB[it.key] ? 'pub' : '';
 function msg(t, kind = '') { const m = $('msg'); m.textContent = t; m.className = 'feedback ' + kind; }
 async function save(c) { await putClip(c); CLIPS[c.key] = c; renderCounts(); renderList(); renderItem(); }
 
@@ -275,7 +278,9 @@ function renderCounts() {
   const mic = ITEMS.filter(i => CLIPS[i.key] && CLIPS[i.key].source === 'mic').length;
   const ai = ITEMS.filter(i => CLIPS[i.key] && CLIPS[i.key].source === 'ai').length;
   const pub = ITEMS.filter(i => !CLIPS[i.key] && PUB[i.key]).length;
-  $('count').textContent = `전체 ${total}개 중 ${mic + ai + pub}개 준비됨 (녹음 ${mic}, AI ${ai}, 올라간 것 ${pub})`;
+  const bad = ITEMS.filter(i => tooLong(CLIPS[i.key])).length;
+  $('count').textContent = `전체 ${total}개 중 ${mic + ai + pub}개 준비됨 (녹음 ${mic}, AI ${ai}, 올라간 것 ${pub})` + (bad ? `. 이 중 너무 긴 AI 소리 ${bad}개` : '');
+  $('purge').hidden = !bad; $('purge').textContent = `너무 긴 AI 소리 ${bad}개 지우기`;
   $('barMic').style.width = (mic / total * 100) + '%'; $('barAi').style.width = (ai / total * 100) + '%'; $('barPub').style.width = (pub / total * 100) + '%';
 }
 function renderItem() {
@@ -287,7 +292,7 @@ function renderItem() {
   const it = cur(), st = stateOf(it);
   $('pos').textContent = `${idx + 1} / ${VIEW.length}`;
   $('status').className = 'tag ' + st;
-  $('status').textContent = pending && pending.key === it.key ? 'AI 목소리 (아직 저장 안 함)' : st === 'mic' ? '녹음됨' : st === 'ai' ? `AI (${CLIPS[it.key].voice})` : st === 'pub' ? '사이트에 올라감' : '아직 없음';
+  $('status').textContent = pending && pending.key === it.key ? 'AI 목소리 (아직 저장 안 함)' : st === 'mic' ? '녹음됨' : st === 'long' ? `너무 긴 AI 소리 (${CLIPS[it.key].dur.toFixed(1)}초)` : st === 'ai' ? `AI (${CLIPS[it.key].voice})` : st === 'pub' ? '사이트에 올라감' : '아직 없음';
   $('text').textContent = it.text;
   $('ctx').textContent = it.ctx.map(c => `${c.t}구간 ${c.n}과 ${c.name}, ${c.where}`).join(' / ');
   $('kind').textContent = '말투: ' + KIND_KO[it.kind];
@@ -331,56 +336,32 @@ async function batch() {
   const todo = ITEMS.filter(it => !CLIPS[it.key] && !PUB[it.key]);
   if (!todo.length) { $('batchMsg').textContent = '채울 말이 없어요.'; return; }
   batchOn = true; $('batch').disabled = true; $('batchStop').disabled = false;
-  let done = 0, skipped = 0;
+  let done = 0; const skipped = [];
   for (const it of todo) {
     if (!batchOn) break;
-    $('batchMsg').textContent = `${done + skipped + 1} / ${todo.length}: ${it.text}`;
+    $('batchMsg').textContent = `${done + 1} / ${todo.length}: ${it.text}`;
     const t0 = Date.now();
     try {
       const out = await synth(it);
       await save({ key: it.key, text: it.text, source: 'ai', ...out, at: Date.now() });
       done++;
     } catch (e) {
-      if (e.odd) { skipped++; msg(''); }
-      else { $('batchMsg').textContent = `${done}개를 채우고 멈췄어요. ${e.message}`; batchOn = false; break; }
+      if (e.tooLong) { skipped.push(it.text); continue; }
+      $('batchMsg').textContent = `${done}개를 채우고 멈췄어요. ${e.message}`;
+      batchOn = false; break;
     }
     const wait = 6500 - (Date.now() - t0); if (wait > 0 && batchOn) await sleep(wait);   // 분당 10개 한도에 맞춤
   }
-  if (batchOn) $('batchMsg').textContent = `${done}개를 채웠어요.` + (skipped ? ` 세 번 다 이상하게 나온 ${skipped}개는 건너뛰었어요. 모델이나 목소리를 바꿔서 한 번 더 채우기를 누르면 그것만 다시 해요.` : '');
-  renderOdd();
+  if (batchOn) $('batchMsg').textContent = `${done}개를 채웠어요.` + (skipped.length ? ` 소리가 계속 너무 길어서 ${skipped.length}개는 건너뛰었어요: ${skipped.join(', ')}` : '');
   batchOn = false; $('batch').disabled = false; $('batchStop').disabled = true; refilter();
-}
-
-/* ---------- 이상하게 긴 AI 소리 찾아 지우기 ---------- */
-async function durOf(c) {
-  if (typeof c.dur === 'number') return c.dur;
-  try { const b = await ac().decodeAudioData(await c.blob.arrayBuffer()); c.dur = b.duration; } catch (e) { c.dur = 0; }
-  return c.dur;
-}
-async function oddClips() {
-  const out = [];
-  for (const c of Object.values(CLIPS)) if (c.source === 'ai' && isOdd(c.text, await durOf(c))) out.push(c);
-  return out;
-}
-async function renderOdd() {
-  const n = (await oddClips()).length;
-  $('oddClean').disabled = !n;
-  $('oddMsg').textContent = n ? `이 브라우저에 이상하게 긴 AI 소리가 ${n}개 있어요.` : '이상한 AI 소리는 없어요.';
-}
-async function cleanOdd() {
-  const list = await oddClips(); if (!list.length) return renderOdd();
-  if (!confirm(`이상하게 긴 AI 소리 ${list.length}개를 지울까요? 지운 말은 다시 채우기 대상이 돼요.`)) return;
-  for (const c of list) { await delClip(c.key); delete CLIPS[c.key]; }
-  renderCounts(); renderList(); refilter(); renderOdd();
-  $('oddMsg').textContent = `${list.length}개를 지웠어요. 이제 위에서 채우기 시작을 누르면 그 말들을 다시 만들어요.`;
 }
 
 /* ---------- zip 내려받기 ---------- */
 function hash(s) { let h = 0x811c9dc5; for (const ch of s) { h ^= ch.codePointAt(0); h = Math.imul(h, 0x01000193) >>> 0; } return h.toString(36); }
 function slug(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'x'; }
 async function exportZip() {
-  const odd = new Set((await oddClips()).map(c => c.key));
-  const keys = Object.keys(CLIPS).filter(k => !odd.has(k));
+  const keys = Object.keys(CLIPS).filter(k => !tooLong(CLIPS[k]));
+  const skippedLong = Object.keys(CLIPS).length - keys.length;
   if (!keys.length) { $('exportMsg').textContent = '아직 저장한 소리가 없어요.'; return; }
   const zip = new JSZip(), manifest = { ...PUB };
   for (const k of keys) {
@@ -392,7 +373,7 @@ async function exportZip() {
   zip.file('assets/audio/manifest.js', `// Buen Camino 녹음실에서 만든 파일 (${new Date().toLocaleString('ko-KR')}). 손으로 고치지 않아도 돼요.\nwindow.BC_AUDIO = ${JSON.stringify(sorted, null, 1)};\n`);
   const blob = await zip.generateAsync({ type: 'blob' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'buen-camino-audio.zip'; a.click();
-  $('exportMsg').textContent = `새 소리 ${keys.length}개, 목록 전체 ${Object.keys(sorted).length}개를 담았어요.` + (odd.size ? ` 이상하게 긴 AI 소리 ${odd.size}개는 넣지 않았어요.` : '');
+  $('exportMsg').textContent = `새 소리 ${keys.length}개, 목록 전체 ${Object.keys(sorted).length}개를 담았어요.` + (skippedLong ? ` 너무 긴 AI 소리 ${skippedLong}개는 빼고 담았어요.` : '');
 }
 
 /* ---------- 시작 ---------- */
@@ -433,8 +414,12 @@ async function init() {
   $('prev').onclick = () => move(-1); $('next').onclick = () => move(1);
   $('batch').onclick = batch; $('batchStop').onclick = () => { batchOn = false; $('batchMsg').textContent = '지금 것까지 하고 멈춰요...'; };
   $('export').onclick = exportZip;
-  $('oddClean').onclick = cleanOdd;
-  renderOdd();
+  $('purge').onclick = async () => {
+    const bad = Object.values(CLIPS).filter(tooLong);
+    if (!bad.length || !confirm(`길이가 비정상적으로 긴 AI 소리 ${bad.length}개를 지울까요? 지운 말은 "아직 안 한 것"으로 돌아가요.`)) return;
+    for (const c of bad) { await delClip(c.key); delete CLIPS[c.key]; }
+    refilter(); renderCounts(); renderList(); msg(`${bad.length}개를 지웠어요. 이제 채우기를 다시 하면 돼요.`, 'ok');
+  };
   document.addEventListener('keydown', e => {
     if (e.target.closest('input, select, textarea')) return;
     if (e.code === 'Space') { e.preventDefault(); toggleRec(); }
@@ -446,5 +431,5 @@ async function init() {
   });
 }
 init();
-window.__REC = { ITEMS, finish, toMp3, exportZip, synth, prompt, maxDur, oddClips, CLIPS: () => CLIPS };   // 시험용
+window.__REC = { ITEMS, prompt, maxDur, tooLong, finish, toMp3, exportZip, synth, CLIPS: () => CLIPS };   // 시험용
 })();
