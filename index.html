@@ -11,14 +11,14 @@
 <meta name="theme-color" content="#1F4B8E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=11">
+<link rel="stylesheet" href="assets/style.css?v=15">
 </head>
 <body>
 <div class="wrap">
   <header class="top">
     <a class="brand" href="./">Buen Camino</a>
     <div class="right">
-      <nav><a href="#credencial" data-i18n="navCred">My credencial</a><a href="#guide" data-i18n="navGuide">How it works</a></nav>
+      <nav><a href="hoy/" data-i18n="navHoy">Today's steps</a><a href="#credencial" data-i18n="navCred">My credencial</a><a href="#guide" data-i18n="navGuide">How it works</a></nav>
       <button class="lang-btn" id="lang" type="button">한국어</button>
     </div>
   </header>
@@ -50,8 +50,8 @@
       <p class="lead" data-i18n="leadTramos">The French Way, from Roncesvalles to Santiago, split into seven stretches. Each one teaches what you will really run into on that part of the trail, and every lesson you finish earns a stamp in your credencial.</p>
       <ol class="tramos">
         <li class="open"><div class="name"><a href="tramo-1/" data-i18n="tn0">Roncesvalles to Pamplona</a><span class="tag open" data-i18n="open">Open</span></div><div class="what" data-i18n="tw0">Sounds and spelling: vowels, consonants, stress, and accent marks</div></li>
-<li><div class="name"><span data-i18n="tn1">Pamplona to Logroño</span><span class="tag" data-i18n="soon">Coming soon</span></div><div class="what" data-i18n="tw1">Greetings, introducing yourself, numbers, money</div></li>
-<li><div class="name"><span data-i18n="tn2">Logroño to Burgos</span><span class="tag" data-i18n="soon">Coming soon</span></div><div class="what" data-i18n="tw2">Ordering food, the pilgrim menu, saying what you like</div></li>
+<li class="open"><div class="name"><a href="tramo-2/" data-i18n="tn1">Pamplona to Logroño</a><span class="tag open" data-i18n="open">Open</span></div><div class="what" data-i18n="tw1">Greetings, introducing yourself, numbers, money</div></li>
+<li class="open"><div class="name"><a href="tramo-3/" data-i18n="tn2">Logroño to Burgos</a><span class="tag open" data-i18n="part">Lesson 1 open</span></div><div class="what" data-i18n="tw2">Colors, ordering food, the pilgrim menu, saying what you like</div></li>
 <li><div class="name"><span data-i18n="tn3">The Meseta, Burgos to León</span><span class="tag" data-i18n="soon">Coming soon</span></div><div class="what" data-i18n="tw3">Asking the way, time, weather, explaining how you feel at the pharmacy</div></li>
 <li><div class="name"><span data-i18n="tn4">León to Ponferrada</span><span class="tag" data-i18n="soon">Coming soon</span></div><div class="what" data-i18n="tw4">Booking a bed, solving problems, talking about what you did today</div></li>
 <li><div class="name"><span data-i18n="tn5">Ponferrada to Sarria</span><span class="tag" data-i18n="soon">Coming soon</span></div><div class="what" data-i18n="tw5">Shopping, comparing, Galicia's two languages</div></li>
@@ -63,7 +63,7 @@
       <h2 id="t-rooms" data-i18n="hRooms">Practice rooms</h2>
       <p class="lead" data-i18n="leadRooms">Alongside the main route: a little every day, or whatever you pick.</p>
       <div class="two">
-        <div class="room"><h3><span data-i18n="r1h">Today's steps</span> <span class="tag" data-i18n="soon">Coming soon</span></h3><p data-i18n="r1p">Hear five words from lessons you finished and write them. Words you miss come back the next day.</p></div>
+        <a class="room" href="hoy/"><h3><span data-i18n="r1h">Today's steps</span> <span class="tag" id="hoyTag"></span></h3><p data-i18n="r1p">Hear five words from lessons you finished and write them. Words you miss come back the next day.</p></a>
         <div class="room"><h3><span data-i18n="r2h">Train trips across Spain</span> <span class="tag" data-i18n="soon">Coming soon</span></h3><p data-i18n="r2p">Madrid, Toledo, Seville, Granada, Valencia. Each city is a three-lesson bundle you can pick up any time.</p></div>
       </div>
     </section>
@@ -84,6 +84,10 @@
       <div class="credencial">
         <header><strong>Credencial del Peregrino</strong><span data-i18n="credSub">First stretch, Roncesvalles to Pamplona</span></header>
         <div class="sellos" id="sellos"></div>
+        <header class="second"><span></span><span data-i18n="credSub2">Second stretch, Pamplona to Logroño</span></header>
+        <div class="sellos" id="sellos2"></div>
+        <header class="second"><span></span><span data-i18n="credSub3">Third stretch, Logroño to Burgos</span></header>
+        <div class="sellos" id="sellos3"></div>
       </div>
     </section>
 
@@ -114,8 +118,15 @@
   </main>
   <footer><div class="links"><span><span data-i18n="foot">Buen Camino. Made by</span> <a href="mailto:hyeonhoyu@gmail.com">Dr. Henry Yu</a></span><a href="https://buymeacoffee.com/henryyu" target="_blank" rel="noopener">Buy Me a Coffee</a></div></footer>
 </div>
-<script src="assets/common.js?v=11"></script>
-<script src="assets/tramo-1-data.js?v=11"></script>
+<script src="assets/audio/manifest.js"></script>
+<script src="assets/common.js?v=15"></script>
+<script src="assets/tramo-1-data.js?v=15"></script>
+<script src="assets/tramo-1-lessons.js?v=15"></script>
+<script src="assets/tramo-2-data.js?v=15"></script>
+<script src="assets/tramo-2-lessons.js?v=15"></script>
+<script src="assets/tramo-3-data.js?v=15"></script>
+<script src="assets/tramo-3-lessons.js?v=15"></script>
+<script src="assets/hoy-core.js?v=15"></script>
 <script>
   const KO = {
  "tn0": "론세스바예스에서 팜플로나까지",
@@ -123,7 +134,8 @@
  "tn1": "팜플로나에서 로그로뇨까지",
  "tw1": "인사, 자기소개, 숫자, 돈",
  "tn2": "로그로뇨에서 부르고스까지",
- "tw2": "음식 주문, 순례자 메뉴, 좋아하는 것 말하기",
+ "tw2": "색깔, 음식 주문, 순례자 메뉴, 좋아하는 것 말하기",
+ "part": "1과 열림",
  "tn3": "메세타 고원, 부르고스에서 레온까지",
  "tw3": "길 묻기, 시간, 날씨, 약국에서 몸 상태 설명하기",
  "tn4": "레온에서 폰페라다까지",
@@ -132,6 +144,7 @@
  "tw5": "쇼핑, 비교하기, 갈리시아의 두 언어",
  "tn6": "사리아에서 산티아고까지",
  "tw6": "계획과 감정, 나의 순례 이야기 쓰기",
+ "navHoy": "오늘의 걸음",
  "navCred": "나의 크레덴시알",
  "navGuide": "배우는 방법",
  "open": "열림",
@@ -158,6 +171,8 @@
  "hCred": "나의 크레덴시알",
  "leadCred": "순례자 여권이에요. 과를 마치면 도장이 찍히고, 동그라미는 그 과에서 받은 걸음 수예요.",
  "credSub": "첫째 구간, 론세스바예스에서 팜플로나까지",
+ "credSub2": "둘째 구간, 팜플로나에서 로그로뇨까지",
+ "credSub3": "셋째 구간, 로그로뇨에서 부르고스까지",
  "hGuide": "배우는 방법",
  "g1h": "하루 한 과, 10분",
  "g1p": "한 과는 소리 듣기, 글자 고르기, 따라 말하기, 모음 채우기, 도장 받기 순서로 가요. 걸음을 세 개 다 받지 못했다면 다음 날 같은 과를 다시 걸어도 좋아요.",
@@ -177,13 +192,23 @@
     if (!trio.dataset.altEn) trio.dataset.altEn = trio.alt;
     trio.alt = BC.L(trio.dataset.altEn, trio.dataset.altKo);
     document.title = BC.L('Buen Camino: Spanish on the Way of St. James', 'Buen Camino - 순례길에서 배우는 스페인어');
-    const done = TRAMO1.every(e => BC.getStamp('1-' + e.n));
-    document.querySelector('[data-i18n="credSub"]').insertAdjacentHTML('beforeend', done ? BC.L(' (completed)', ' (완주)') : '');
-    document.getElementById('sellos').innerHTML = TRAMO1.map(e => {
-      const s = BC.getStamp('1-' + e.n);
-      return s ? '<div class="sello has">' + BC.stampSVG(e.name, s) + '</div>'
-               : '<div class="sello">' + BC.L('Lesson ' + e.n, e.n + '과') + '<br>' + e.name + '</div>';
-    }).join('');
+    const hs = HOY.status(), tag = document.getElementById('hoyTag');
+    tag.className = 'tag' + (hs.kind === 'todo' ? ' open' : '');
+    tag.textContent = hs.kind === 'locked' ? BC.L('After lesson 1', '1과를 마치면')
+      : hs.kind === 'todo' ? BC.L(hs.left + ' waiting', hs.left + '개 기다려요')
+      : hs.kind === 'done' ? BC.L('Done today', '오늘 완료') : BC.L('Resting today', '오늘은 쉬어요');
+    const stampRow = (list, t, id, sub) => {
+      const done = list.every(e => BC.getStamp(t + '-' + e.n));
+      document.querySelector('[data-i18n="' + sub + '"]').insertAdjacentHTML('beforeend', done ? BC.L(' (completed)', ' (완주)') : '');
+      document.getElementById(id).innerHTML = list.map(e => {
+        const s = BC.getStamp(t + '-' + e.n);
+        return s ? '<div class="sello has">' + BC.stampSVG(e.name, s) + '</div>'
+                 : '<div class="sello">' + BC.L('Lesson ' + e.n, e.n + '과') + '<br>' + e.name + '</div>';
+      }).join('');
+    };
+    stampRow(TRAMO1, 1, 'sellos', 'credSub');
+    stampRow(TRAMO2, 2, 'sellos2', 'credSub2');
+    stampRow(TRAMO3, 3, 'sellos3', 'credSub3');
   }
   document.querySelectorAll('[data-full]').forEach(img => img.src = BC.charFull(img.dataset.full));
   BC.mountToggle(render);

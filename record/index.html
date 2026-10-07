@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>녹음실 - Buen Camino</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css?v=15">
+<link rel="stylesheet" href="../assets/record.css?v=15">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="../">Buen Camino <span class="rec-badge">녹음실</span></a>
+    <div class="right"><nav><a href="../">사이트로</a></nav></div>
+  </header>
+  <main class="rec">
+    <h1 class="rec-title">Buen Camino 소리 녹음</h1>
+    <p class="lead">사이트에서 들리는 스페인어 소리를 하나씩 녹음해요. 목록은 구간과 과 순서로 나오고, 아직 녹음하지 않은 첫 말에서 시작해요. 녹음은 이 브라우저에 저장되니 여러 번에 나눠서 해도 되고, 일부만 올려도 돼요. 녹음이 없는 말은 기기 음성으로 대신 나와요.</p>
+    <ul class="rec-tips">
+      <li>사람 목소리로 녹음해도 되고 AI 목소리로 채워도 돼요. AI로 저장한 말도 나중에 녹음하면 사람 목소리로 바뀌어요.</li>
+      <li>앞뒤 빈 소리와 음량은 도구가 자동으로 맞춰요. 처음부터 끝까지 한 목소리, 같은 속도로 맞추는 것이 좋아요.</li>
+      <li>1구간의 소리 카드(a, ma, ca co cu 같은 것)는 글자 이름이 아니라 소리예요. AI에게도 그렇게 전해요.</li>
+      <li>단축키: <kbd>스페이스</kbd> 녹음 시작과 끝, <kbd>P</kbd> 다시 듣기, <kbd>→</kbd> 다음, <kbd>←</kbd> 이전, <kbd>A</kbd> AI 목소리 만들기, <kbd>S</kbd> AI 목소리 저장</li>
+    </ul>
+
+    <section class="panel rec-ai" aria-labelledby="t-ai">
+      <h2 id="t-ai">AI 목소리 설정</h2>
+      <div class="rec-grid">
+        <label>Gemini API 키
+          <span class="row"><input id="key" type="password" autocomplete="off" spellcheck="false" placeholder="키를 붙여 넣어요"><button class="btn small go" id="keySave">저장</button><button class="btn small" id="keyClear">키 지우기</button></span>
+          <small id="keyState"></small>
+        </label>
+        <label>모델
+          <select id="model"></select>
+          <small>모델마다 하루 한도와 분당 한도가 따로 있어요. 한 모델이 하루 한도에 걸리면 다른 모델로 바꾸고 이어서 채우면 돼요. 한도는 태평양 시간 자정(인디애나 새벽 3시쯤)에 다시 채워져요.</small>
+        </label>
+        <label>목소리
+          <span class="row"><select id="voice"></select><button class="btn small" id="preview">들어 보기</button></span>
+          <small>처음부터 끝까지 한 목소리로 맞추는 것이 좋아요.</small>
+        </label>
+        <label>빠르기
+          <select id="speed"><option value="slow">천천히</option><option value="bitslow" selected>조금 천천히</option><option value="normal">보통</option></select>
+        </label>
+        <label class="check"><input type="checkbox" id="hints" checked> 말마다 말투 안내(소리, 음절, 질문 등)도 AI에게 전하기</label>
+        <label class="check"><input type="checkbox" id="castilian" checked> 스페인 표준 발음으로 (z와 ce, ci를 th로)</label>
+      </div>
+      <details class="rec-help"><summary>API 키 받는 법 (한 번만)</summary>
+        <ol>
+          <li><code>aistudio.google.com</code>에 Google 계정으로 로그인해요.</li>
+          <li>Get API key를 누르고 Create API key로 키를 만들어요. 달토끼 녹음실에서 쓰던 키를 그대로 써도 돼요.</li>
+          <li>많이 만들 때는 무료 한도에 금방 걸릴 수 있어요. 그럴 때는 같은 화면에서 결제(유료 등급)를 켜면 돼요. 한도에 걸리면 도구가 잠깐 기다렸다가 다시 시도해요.</li>
+          <li>키를 위 칸에 붙여 넣고 저장해요. 키는 이 브라우저에만 남고, 코드나 저장소, 내려받는 zip에는 들어가지 않아요.</li>
+        </ol>
+      </details>
+    </section>
+
+    <section class="panel rec-progress">
+      <div class="row" style="justify-content:space-between">
+        <strong id="count"></strong>
+        <span class="row">
+          <select id="filter"><option value="all">전체</option><option value="todo" selected>아직 안 한 것</option><option value="ai">AI로 한 것</option><option value="mic">녹음한 것</option></select>
+          <select id="stretch"></select>
+        </span>
+      </div>
+      <div class="rec-bar"><span id="barMic"></span><span id="barAi"></span><span id="barPub"></span></div>
+      <small class="legend"><i class="mic"></i>녹음 <i class="ai"></i>AI <i class="pub"></i>이미 사이트에 올라간 것</small>
+    </section>
+
+    <section class="panel rec-item" aria-live="polite">
+      <div class="row" style="justify-content:space-between"><span id="pos" class="tag"></span><span id="status" class="tag"></span></div>
+      <p class="rec-text es" id="text"></p>
+      <p class="rec-ctx" id="ctx"></p>
+      <p class="rec-kind" id="kind"></p>
+      <div class="row rec-actions">
+        <button class="btn" id="device">기기 음성 듣기</button>
+        <button class="btn go" id="rec">녹음 시작</button>
+        <button class="btn" id="play">다시 듣기</button>
+        <button class="btn" id="aiMake">AI 목소리 만들기</button>
+        <button class="btn" id="aiSave" disabled>AI 목소리 저장</button>
+        <button class="btn" id="del">지우기</button>
+      </div>
+      <div class="rec-meter" aria-hidden="true"><span id="meter"></span></div>
+      <p class="feedback" id="msg"></p>
+      <div class="nav-bottom"><button class="btn" id="prev">이전</button><button class="btn go" id="next">다음</button></div>
+    </section>
+
+    <section class="panel rec-batch">
+      <h2>남은 말 AI로 한꺼번에 채우기</h2>
+      <p>지금 고른 목소리와 모델로, 아직 녹음도 AI도 없는 말을 차례로 만들어 저장해요. 분당 한도에 맞춰 천천히 진행하고, 하루 한도에 걸리면 멈춰요. 중간에 멈춰도 만든 것은 남아요.</p>
+      <div class="row"><button class="btn go" id="batch">채우기 시작</button><button class="btn" id="batchStop" disabled>멈추기</button><span id="batchMsg"></span></div>
+    </section>
+
+    <section class="panel rec-export">
+      <h2>사이트에 올리기</h2>
+      <p>zip을 내려받아 저장소 맨 위(index.html이 있는 곳)에 풀면 <code>assets/audio/</code> 폴더에 소리 파일과 <code>manifest.js</code>가 들어가요. 이미 사이트에 올라간 소리 목록도 manifest에 함께 들어가니, 이번에 만든 것만 있어도 괜찮아요. 올린 뒤 몇 분 지나 새로고침하면 사이트에서 녹음한 소리가 나와요.</p>
+      <div class="row"><button class="btn go" id="export">zip 내려받기</button><span id="exportMsg"></span></div>
+    </section>
+
+    <section class="rec-list-wrap">
+      <h2>전체 목록</h2>
+      <ol class="rec-list" id="list"></ol>
+    </section>
+  </main>
+</div>
+<script src="../assets/audio/manifest.js"></script>
+<script src="../assets/common.js?v=15"></script>
+<script src="../assets/tramo-1-data.js?v=15"></script>
+<script src="../assets/tramo-1-lessons.js?v=15"></script>
+<script src="../assets/tramo-2-data.js?v=15"></script>
+<script src="../assets/tramo-2-lessons.js?v=15"></script>
+<script src="../assets/tramo-3-data.js?v=15"></script>
+<script src="../assets/tramo-3-lessons.js?v=15"></script>
+<script src="../assets/vendor/lame.min.js"></script>
+<script src="../assets/vendor/jszip.min.js"></script>
+<script src="../assets/record.js?v=15"></script>
+</body>
+</html>

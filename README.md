@@ -24,3 +24,21 @@
 ## 첫째 구간 수업 (1과~8과)
 1 Roncesvalles 모음 / 2 Burguete 자음, f, b=v / 3 Espinal c, z, d / 4 Viscarret g, j / 5 Zubiri r, rr / 6 Larrasoaña ñ, ll, y, ch, qu, h / 7 Villava 강세와 악센트 / 8 Pamplona 종합.
 내용은 assets/tramo-1-lessons.js. 채우기 문제에서 rr, ll 같은 두 글자 답은 a: ['rr'] 처럼 직접 적는다.
+
+## 오늘의 걸음 (hoy/)
+도장을 받은 과의 따라 말하기 낱말로 하루 다섯 개씩 듣고 쓰기. assets/hoy-core.js가 복습 일정을 정한다: 틀리면 다음 날, 한 번에 맞히면 2일, 4일, 8일 ... 간격으로 다시 나온다. 기록은 브라우저 localStorage의 buencamino:hoy:v1.
+
+## 둘째 구간 (tramo-2/)
+팜플로나에서 로그로뇨까지: 1 Cizur Menor 인사 / 2 Alto del Perdón 이름 / 3 Puente la Reina 출신 / 4 Cirauqui 숫자 0~10 / 5 Estella 숫자 11~100 / 6 Irache 가격 / 7 Los Arcos 주문과 계산 / 8 Logroño 숙소 체크인.
+내용은 assets/tramo-2-lessons.js (LESSONS2). 수업 엔진은 assets/lesson.js 하나로 모든 구간이 함께 쓰고, 각 구간 index.html의 TRAMO_CFG가 구간 정보를 넘긴다.
+둘째 구간부터는 듣기 단계가 문장 목록(phrases), 고르기는 뜻 고르기, 네 번째 단계는 낱말을 순서대로 눌러 문장 만들기(build).
+
+## 셋째 구간 (tramo-3/)
+로그로뇨에서 부르고스까지. 지금은 1과 Navarrete(색깔)만 열려 있다. 색깔 과는 units에 c(색상 코드), 레슨에 colors 목록을 두면 카드와 고르기 보기가 색 동그라미로 나온다.
+숫자는 둘째 구간 4과(0~10), 5과(11~100), 6과(가격)에 있다.
+
+## 녹음실 (record/)
+만드는 사람용 도구. 사이트 메뉴에는 없고 주소로만 들어간다 (…/record/). 사이트의 모든 스페인어 소리(구간별 카드, 문장, 따라 말하기 등)를 순서대로 보여 주고, 마이크 녹음이나 Gemini TTS로 채운다.
+녹음은 브라우저 IndexedDB(buencamino-rec)에 저장, API 키는 이 브라우저 localStorage에만 저장된다.
+zip을 저장소 맨 위에 풀면 assets/audio/es/*.mp3 와 assets/audio/manifest.js 가 바뀌고, 사이트는 녹음이 있는 말은 녹음으로, 없는 말은 기기 음성으로 재생한다.
+mp3 변환은 assets/vendor/lame.min.js(lamejs, LGPL), zip은 assets/vendor/jszip.min.js(MIT).

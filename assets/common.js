@@ -45,15 +45,32 @@ const BC = (() => {
   };
   if ('speechSynthesis' in window) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
 
-  function speak(text, rate = 0.8) {
-    const map = window.BC_AUDIO || {};
-    if (map[text]) { new Audio(map[text]).play(); return true; }
+  // 녹음 파일: assets/audio/manifest.js 의 BC_AUDIO = { "낱말(소문자)": "assets/audio/es/파일.mp3" }
+  const ROOT = (document.currentScript && new URL('..', document.currentScript.src).href) || '';
+  const keyOf = t => String(t).trim().toLowerCase();
+  function tts(text, rate) {
     if (!('speechSynthesis' in window)) return false;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'es-ES'; if (voice) u.voice = voice; u.rate = rate;
     speechSynthesis.speak(u);
     return true;
+  }
+  let current = null;
+  function speak(text, rate = 0.8) {
+    const map = window.BC_AUDIO || {};
+    const file = map[keyOf(text)];
+    if (file) {
+      if (current) { current.pause(); }
+      if ('speechSynthesis' in window) speechSynthesis.cancel();
+      const a = new Audio(ROOT + file);
+      a.preservesPitch = true;
+      a.playbackRate = rate < 0.7 ? 0.75 : 1;
+      current = a;
+      a.play().catch(() => tts(text, rate));
+      return true;
+    }
+    return tts(text, rate);
   }
 
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -84,5 +101,5 @@ const BC = (() => {
       <text x="50" y="56" text-anchor="middle" font-family="Alegreya,serif" font-size="8.5" font-weight="700" fill="#8C2F4E">${name.toUpperCase()}</text>
       ${dots}</svg>`;
   }
-  return { charFull, charSrc, charImg, getLang, L, applyI18n, mountToggle, getStamp, setStamp, speak, canListen, listen, norm, playIcon, stampSVG, hasVoice: () => !!voice };
+  return { ROOT, keyOf, tts, charFull, charSrc, charImg, getLang, L, applyI18n, mountToggle, getStamp, setStamp, speak, canListen, listen, norm, playIcon, stampSVG, hasVoice: () => !!voice };
 })();
