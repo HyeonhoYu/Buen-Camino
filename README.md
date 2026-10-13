@@ -42,6 +42,20 @@
 메세타, 부르고스에서 레온까지: 1 Hornillos del Camino 길 묻기 / 2 Hontanas 거리와 걸리는 시간 / 3 Castrojeriz 시간 말하기 / 4 Boadilla del Camino 여는 시간과 닫는 시간 / 5 Frómista 날씨 / 6 Carrión de los Condes 몸 상태와 기분 / 7 Sahagún 약국에서 / 8 León 종합: 도시에 도착하기.
 내용은 assets/tramo-4-lessons.js (LESSONS4).
 
+## 다섯째 구간 (tramo-5/)
+레온에서 폰페라다까지: 1 La Virgen del Camino 침대 예약 / 2 Hospital de Órbigo 샤워, 빨래, 와이파이 / 3 Astorga 문제 해결 / 4 Rabanal del Camino 잃어버린 물건 / 5 Foncebadón 오늘 한 일(he + ado/ido) / 6 Cruz de Ferro 왜 걷는지(por, para) / 7 Molinaseca 내일 계획(ir a) / 8 Ponferrada 종합.
+내용은 assets/tramo-5-lessons.js (LESSONS5).
+새 구간을 만들면 assets/hoy-core.js와 assets/record.js의 sets 목록에 한 줄, record/index.html·hoy/index.html·index.html에 스크립트 두 줄을 더한다.
+
+## 여섯째 구간 (tramo-6/)
+폰페라다에서 사리아까지: 1 Cacabelos 옷 사기 / 2 Villafranca del Bierzo 비교하기 / 3 Las Herrerías 선물 사기 / 4 O Cebreiro 갈리시아의 두 언어 / 5 Triacastela 길 고르기 / 6 Samos 감탄하기 / 7 Aguiada 계산하기 / 8 Sarria 종합.
+
+## 일곱째 구간 (tramo-7/)
+사리아에서 산티아고까지: 1 Portomarín 마음속 기분 / 2 Palas de Rei 바람과 요일 / 3 Melide 어제 한 일 / 4 Arzúa 친구 묘사하기 / 5 O Pedrouzo 이야기하기 / 6 Monte do Gozo 작별 / 7 Santiago 도착과 축하 / 8 Fisterra 종합: 나의 순례 이야기.
+
+## 부록: 스페인 기차 여행 (tren/)
+내용은 assets/tramo-8-data.js, tramo-8-lessons.js (TRAMO8, LESSONS8, 도장 번호 8). 도시마다 세 과: 1~3 Madrid, 4~6 Toledo, 7~9 Sevilla, 10~12 Granada, 13~15 Valencia.
+
 ## 녹음실 (record/)
 만드는 사람용 도구. 사이트 메뉴에는 없고 주소로만 들어간다 (…/record/). 사이트의 모든 스페인어 소리(구간별 카드, 문장, 따라 말하기 등)를 순서대로 보여 주고, 마이크 녹음이나 Gemini TTS로 채운다.
 녹음은 브라우저 IndexedDB(buencamino-rec)에 저장, API 키는 이 브라우저 localStorage에만 저장된다.

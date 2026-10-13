@@ -37,7 +37,12 @@ function collect() {
   };
   const sets = [[1, typeof TRAMO1 !== 'undefined' && TRAMO1, typeof LESSONS !== 'undefined' && LESSONS],
                 [2, typeof TRAMO2 !== 'undefined' && TRAMO2, typeof LESSONS2 !== 'undefined' && LESSONS2],
-                [3, typeof TRAMO3 !== 'undefined' && TRAMO3, typeof LESSONS3 !== 'undefined' && LESSONS3]];
+                [3, typeof TRAMO3 !== 'undefined' && TRAMO3, typeof LESSONS3 !== 'undefined' && LESSONS3],
+                [4, typeof TRAMO4 !== 'undefined' && TRAMO4, typeof LESSONS4 !== 'undefined' && LESSONS4],
+                [5, typeof TRAMO5 !== 'undefined' && TRAMO5, typeof LESSONS5 !== 'undefined' && LESSONS5],
+                [6, typeof TRAMO6 !== 'undefined' && TRAMO6, typeof LESSONS6 !== 'undefined' && LESSONS6],
+                [7, typeof TRAMO7 !== 'undefined' && TRAMO7, typeof LESSONS7 !== 'undefined' && LESSONS7],
+                [8, typeof TRAMO8 !== 'undefined' && TRAMO8, typeof LESSONS8 !== 'undefined' && LESSONS8]];
   sets.forEach(([t, list, lx]) => {
     if (!list || !lx) return;
     list.forEach(e => {
@@ -445,7 +450,7 @@ async function init() {
   if (settings.hints === false) $('hints').checked = false;
   if (settings.castilian === false) $('castilian').checked = false;
   if (settings.key) $('key').placeholder = '저장된 키가 있어요';
-  $('stretch').innerHTML = '<option value="all">모든 구간</option>' + [...new Set(ITEMS.map(i => i.stretch))].map(t => `<option value="${t}">${t}구간</option>`).join('');
+  $('stretch').innerHTML = '<option value="all">모든 구간</option>' + [...new Set(ITEMS.map(i => i.stretch))].map(t => `<option value="${t}">${t === 8 ? '부록 기차 여행' : t + '구간'}</option>`).join('');
   try { await openDB(); (await allClips() || []).forEach(c => { CLIPS[c.key] = c; }); }
   catch (e) { msg('이 브라우저에서는 녹음을 저장할 수 없어요. 크롬이나 엣지로 열어 주세요.', 'no'); }
   await loadModels();

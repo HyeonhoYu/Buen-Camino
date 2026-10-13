@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Train trips across Spain - Buen Camino</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="theme-color" content="#1F4B8E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css?v=20">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="../">Buen Camino</a>
+    <div class="right"><nav><a href="./" id="navT"></a><a href="../#credencial" id="navC"></a></nav><button class="lang-btn" id="lang" type="button">한국어</button></div>
+  </header>
+  <main id="app"></main>
+  <footer><div class="links"><a href="mailto:hyeonhoyu@gmail.com">Dr. Henry Yu</a><a href="https://buymeacoffee.com/henryyu" target="_blank" rel="noopener">Buy Me a Coffee</a></div></footer>
+</div>
+<script src="../assets/audio/manifest.js"></script>
+<script src="../assets/common.js?v=20"></script>
+<script src="../assets/tramo-8-data.js?v=20"></script>
+<script src="../assets/tramo-8-lessons.js?v=20"></script>
+<script>
+window.TRAMO_CFG = { n: 8, list: TRAMO8, lessons: LESSONS8,
+  short: ['Train trips', '기차 여행'],
+  title: ['Train trips across Spain', '부록: 스페인 기차 여행'],
+  lead: ['Madrid, Toledo, Seville, Granada, and Valencia. Each city is a three-lesson bundle: stations and tickets, getting around, food, sights, and solving travel problems. Start with any city you like.', '마드리드, 톨레도, 세비야, 그라나다, 발렌시아. 도시마다 세 과씩 묶여 있어요. 역과 표, 돌아다니기, 음식, 볼거리, 여행 중 문제 해결을 배워요. 마음에 드는 도시부터 시작하세요.'],
+  finalMsg: ['You have finished the train trips and every lesson on the site. ¡Buen viaje!', '기차 여행과 사이트의 모든 과를 마쳤어요. ¡Buen viaje!'],
+  next: { href: '../#credencial', label: ['See my credencial', '크레덴시알 보기'] } };
+</script>
+<script src="../assets/lesson.js?v=20"></script>
+</body>
+</html>
