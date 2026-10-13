@@ -8,8 +8,8 @@
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/style.css?v=20">
-<link rel="stylesheet" href="../assets/record.css?v=20">
+<link rel="stylesheet" href="../assets/style.css?v=21">
+<link rel="stylesheet" href="../assets/record.css?v=21">
 </head>
 <body>
 <div class="wrap">
@@ -99,8 +99,11 @@
 
     <section class="panel rec-export">
       <h2>사이트에 올리기</h2>
-      <p>zip을 내려받아 저장소 맨 위(index.html이 있는 곳)에 풀면 <code>assets/audio/</code> 폴더에 소리 파일과 <code>manifest.js</code>가 들어가요. 이미 사이트에 올라간 소리 목록도 manifest에 함께 들어가니, 이번에 만든 것만 있어도 괜찮아요. 너무 긴 AI 소리는 zip에 넣지 않아요. 올린 뒤 몇 분 지나 새로고침하면 사이트에서 녹음한 소리가 나와요.</p>
-      <div class="row"><button class="btn go" id="export">zip 내려받기</button><span id="exportMsg"></span></div>
+      <p>GitHub 웹 화면에서는 한 번에 파일 100개까지만 올릴 수 있어서, 소리를 정한 개수씩 나눠 여러 zip으로 받아요. 각 zip을 풀면 <code>assets/audio/es/</code>의 소리 파일들과 <code>assets/audio/manifest.js</code> 하나가 나와요. 저장소 맨 위(index.html이 있는 곳)에 그대로 올리면 돼요.</p>
+      <p><strong>1번부터 순서대로</strong> 올려 주세요. 뒤 번호 zip의 manifest.js에는 앞 번호의 소리 목록까지 모두 들어 있어서, 순서대로 올리면 중간에 멈춰도 사이트는 정상으로 작동해요. 이미 사이트에 올라간 소리는 빼고 담아요. 다만 올라간 말을 다시 녹음하거나 다시 만든 것은 함께 담아요. 너무 긴 AI 소리는 담지 않아요.</p>
+      <div class="row"><label for="chunk">zip 하나에 담을 소리 수</label><input id="chunk" type="number" min="10" max="99" value="90" style="width:5rem"><label><input type="checkbox" id="incPub"> 이미 올라간 소리도 다시 담기</label></div>
+      <div class="row" style="margin-top:.6rem"><button class="btn go" id="export">zip 나누기</button><span id="exportMsg"></span></div>
+      <div id="parts" style="margin-top:.6rem"></div>
     </section>
 
     <section class="rec-list-wrap">
@@ -110,25 +113,25 @@
   </main>
 </div>
 <script src="../assets/audio/manifest.js"></script>
-<script src="../assets/common.js?v=20"></script>
-<script src="../assets/tramo-1-data.js?v=20"></script>
-<script src="../assets/tramo-1-lessons.js?v=20"></script>
-<script src="../assets/tramo-2-data.js?v=20"></script>
-<script src="../assets/tramo-2-lessons.js?v=20"></script>
-<script src="../assets/tramo-3-data.js?v=20"></script>
-<script src="../assets/tramo-3-lessons.js?v=20"></script>
-<script src="../assets/tramo-4-data.js?v=20"></script>
-<script src="../assets/tramo-4-lessons.js?v=20"></script>
-<script src="../assets/tramo-5-data.js?v=20"></script>
-<script src="../assets/tramo-5-lessons.js?v=20"></script>
-<script src="../assets/tramo-6-data.js?v=20"></script>
-<script src="../assets/tramo-6-lessons.js?v=20"></script>
-<script src="../assets/tramo-7-data.js?v=20"></script>
-<script src="../assets/tramo-7-lessons.js?v=20"></script>
-<script src="../assets/tramo-8-data.js?v=20"></script>
-<script src="../assets/tramo-8-lessons.js?v=20"></script>
+<script src="../assets/common.js?v=21"></script>
+<script src="../assets/tramo-1-data.js?v=21"></script>
+<script src="../assets/tramo-1-lessons.js?v=21"></script>
+<script src="../assets/tramo-2-data.js?v=21"></script>
+<script src="../assets/tramo-2-lessons.js?v=21"></script>
+<script src="../assets/tramo-3-data.js?v=21"></script>
+<script src="../assets/tramo-3-lessons.js?v=21"></script>
+<script src="../assets/tramo-4-data.js?v=21"></script>
+<script src="../assets/tramo-4-lessons.js?v=21"></script>
+<script src="../assets/tramo-5-data.js?v=21"></script>
+<script src="../assets/tramo-5-lessons.js?v=21"></script>
+<script src="../assets/tramo-6-data.js?v=21"></script>
+<script src="../assets/tramo-6-lessons.js?v=21"></script>
+<script src="../assets/tramo-7-data.js?v=21"></script>
+<script src="../assets/tramo-7-lessons.js?v=21"></script>
+<script src="../assets/tramo-8-data.js?v=21"></script>
+<script src="../assets/tramo-8-lessons.js?v=21"></script>
 <script src="../assets/vendor/lame.min.js"></script>
 <script src="../assets/vendor/jszip.min.js"></script>
-<script src="../assets/record.js?v=20"></script>
+<script src="../assets/record.js?v=21"></script>
 </body>
 </html>

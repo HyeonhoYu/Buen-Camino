@@ -328,7 +328,7 @@ const cur = () => VIEW[idx] || ITEMS[0];
 const stateOf = it => tooLong(CLIPS[it.key]) ? 'long' : CLIPS[it.key] && CLIPS[it.key].check ? 'check' : CLIPS[it.key] ? CLIPS[it.key].source : PUB[it.key] ? 'pub' : '';
 const escH = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function msg(t, kind = '') { const m = $('msg'); m.textContent = t; m.className = 'feedback ' + kind; }
-async function save(c) { await putClip(c); CLIPS[c.key] = c; renderCounts(); renderList(); renderItem(); }
+async function save(c) { if (PUB[c.key]) c.replacesPub = true; await putClip(c); CLIPS[c.key] = c; renderCounts(); renderList(); renderItem(); }
 
 function renderCounts() {
   const total = ITEMS.length;
@@ -422,23 +422,48 @@ async function batch() {
 /* ---------- zip 내려받기 ---------- */
 function hash(s) { let h = 0x811c9dc5; for (const ch of s) { h ^= ch.codePointAt(0); h = Math.imul(h, 0x01000193) >>> 0; } return h.toString(36); }
 function slug(s) { return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'x'; }
-async function exportZip() {
-  const keys = Object.keys(CLIPS).filter(k => !tooLong(CLIPS[k]));
-  const skippedLong = Object.keys(CLIPS).length - keys.length;
-  if (!keys.length) { $('exportMsg').textContent = '아직 저장한 소리가 없어요.'; return; }
-  $('export').disabled = true; $('exportMsg').textContent = 'zip을 만들고 있어요...';
-  const zip = new JSZip(), manifest = { ...PUB };
-  for (const k of keys) {
-    const path = `assets/audio/es/${slug(k)}-${hash(k)}.mp3`;
-    zip.file(path, CLIPS[k].blob);
-    manifest[k] = path;
+/* 나눠 받기: GitHub 웹 업로드는 한 번에 100개 파일까지라서, 소리를 N개씩 묶어 여러 zip으로 나눠요.
+   k번째 zip의 manifest에는 이미 올라간 목록 + 1번부터 k번 zip까지의 소리가 들어가요.
+   그래서 순서대로 올리면 어느 단계에서 멈춰도 사이트가 깨지지 않아요. */
+let PARTS = [];
+function exportKeys() {
+  const incPub = $('incPub').checked;
+  const order = new Map(ITEMS.map((it, i) => [it.key, i]));
+  const all = Object.keys(CLIPS).filter(k => !tooLong(CLIPS[k]));
+  const keys = all.filter(k => incPub || !PUB[k] || CLIPS[k].replacesPub)
+    .sort((x, y) => (order.has(x) ? order.get(x) : 1e9) - (order.has(y) ? order.get(y) : 1e9) || x.localeCompare(y));
+  return { keys, skippedLong: Object.keys(CLIPS).length - all.length, skippedPub: all.length - keys.length };
+}
+function clipPath(k) { return `assets/audio/es/${slug(k)}-${hash(k)}.mp3`; }
+function exportZip() {
+  const n = Math.max(10, Math.min(99, parseInt($('chunk').value, 10) || 90));
+  $('chunk').value = n; settings.chunk = n; saveSettings();
+  const { keys, skippedLong, skippedPub } = exportKeys();
+  if (!keys.length) {
+    $('parts').innerHTML = '';
+    $('exportMsg').textContent = '새로 올릴 소리가 없어요.' + (skippedPub ? ` 이미 사이트에 올라간 ${skippedPub}개는 뺐어요.` : '');
+    return;
   }
+  PARTS = [];
+  for (let i = 0; i < keys.length; i += n) PARTS.push(keys.slice(i, i + n));
+  const label = ks => { const its = ks.map(k => ITEMS.find(it => it.key === k)).filter(Boolean); const st = [...new Set(its.map(it => it.stretch))].map(t => t === 8 ? '부록' : t + '구간').join(', '); return st; };
+  $('parts').innerHTML = PARTS.map((ks, i) => `<div class="row" style="margin:.35rem 0"><button class="btn" data-part="${i}">${i + 1}번 zip 받기</button><span>소리 ${ks.length}개${label(ks) ? ' (' + label(ks) + ')' : ''}</span><span data-done="${i}"></span></div>`).join('');
+  $('parts').querySelectorAll('[data-part]').forEach(b => b.onclick = () => downloadPart(+b.dataset.part));
+  $('exportMsg').textContent = `새로 올릴 소리 ${keys.length}개를 ${PARTS.length}개 zip으로 나눴어요. 1번부터 차례로 받아서 올려 주세요.` +
+    (skippedPub ? ` 이미 사이트에 올라간 ${skippedPub}개는 뺐어요.` : '') + (skippedLong ? ` 너무 긴 AI 소리 ${skippedLong}개는 뺐어요.` : '');
+}
+async function downloadPart(i) {
+  const btn = $('parts').querySelector(`[data-part="${i}"]`), done = $('parts').querySelector(`[data-done="${i}"]`);
+  btn.disabled = true; done.textContent = 'zip을 만들고 있어요...';
+  const zip = new JSZip(), manifest = { ...PUB };
+  PARTS.slice(0, i + 1).flat().forEach(k => { manifest[k] = clipPath(k); });
+  for (const k of PARTS[i]) zip.file(clipPath(k), CLIPS[k].blob);
   const sorted = Object.fromEntries(Object.keys(manifest).sort().map(k => [k, manifest[k]]));
-  zip.file('assets/audio/manifest.js', `// Buen Camino 녹음실에서 만든 파일 (${new Date().toLocaleString('ko-KR')}). 손으로 고치지 않아도 돼요.\nwindow.BC_AUDIO = ${JSON.stringify(sorted, null, 1)};\n`);
+  zip.file('assets/audio/manifest.js', `// Buen Camino 녹음실에서 만든 파일 (${new Date().toLocaleString('ko-KR')}, ${PARTS.length}개 중 ${i + 1}번). 손으로 고치지 않아도 돼요.\nwindow.BC_AUDIO = ${JSON.stringify(sorted, null, 1)};\n`);
   const blob = await zip.generateAsync({ type: 'blob' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'buen-camino-audio.zip'; a.click();
-  $('exportMsg').textContent = `새 소리 ${keys.length}개, 목록 전체 ${Object.keys(sorted).length}개를 담았어요.` + (skippedLong ? ` 너무 긴 AI 소리 ${skippedLong}개는 뺐어요.` : '');
-  $('export').disabled = false;
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = PARTS.length > 1 ? `buen-camino-audio-${i + 1}-of-${PARTS.length}.zip` : 'buen-camino-audio.zip'; a.click();
+  btn.disabled = false; done.textContent = `받았어요. 파일 ${PARTS[i].length + 1}개 (소리 ${PARTS[i].length}개, manifest.js 1개)`;
 }
 
 /* ---------- 시작 ---------- */
@@ -447,6 +472,7 @@ async function init() {
   $('voice').innerHTML = `<optgroup label="여성 목소리">${opts(VOICES_F)}</optgroup><optgroup label="남성 목소리">${opts(VOICES_M)}</optgroup>`;
   $('voice').value = settings.voice || 'Kore';
   if (settings.speed) $('speed').value = settings.speed;
+  if (settings.chunk) $('chunk').value = settings.chunk;
   if (settings.hints === false) $('hints').checked = false;
   if (settings.castilian === false) $('castilian').checked = false;
   if (settings.key) $('key').placeholder = '저장된 키가 있어요';
