@@ -34,8 +34,13 @@
 둘째 구간부터는 듣기 단계가 문장 목록(phrases), 고르기는 뜻 고르기, 네 번째 단계는 낱말을 순서대로 눌러 문장 만들기(build).
 
 ## 셋째 구간 (tramo-3/)
-로그로뇨에서 부르고스까지. 지금은 1과 Navarrete(색깔)만 열려 있다. 색깔 과는 units에 c(색상 코드), 레슨에 colors 목록을 두면 카드와 고르기 보기가 색 동그라미로 나온다.
+로그로뇨에서 부르고스까지: 1 Navarrete 색깔 / 2 Nájera 순례자 메뉴 / 3 Azofra 좋아하는 것 말하기(gustar) / 4 Santo Domingo de la Calzada 바에서 타파스와 핀초스 / 5 Grañón 아침 식사와 음료 / 6 Belorado 시장에서 / 7 San Juan de Ortega 먹을 수 있는 것과 없는 것 / 8 Burgos 종합: 순례자들과 저녁 식사.
+내용은 assets/tramo-3-lessons.js (LESSONS3). 색깔 과는 units에 c(색상 코드), 레슨에 colors 목록을 두면 카드와 고르기 보기가 색 동그라미로 나온다.
 숫자는 둘째 구간 4과(0~10), 5과(11~100), 6과(가격)에 있다.
+
+## 넷째 구간 (tramo-4/)
+메세타, 부르고스에서 레온까지: 1 Hornillos del Camino 길 묻기 / 2 Hontanas 거리와 걸리는 시간 / 3 Castrojeriz 시간 말하기 / 4 Boadilla del Camino 여는 시간과 닫는 시간 / 5 Frómista 날씨 / 6 Carrión de los Condes 몸 상태와 기분 / 7 Sahagún 약국에서 / 8 León 종합: 도시에 도착하기.
+내용은 assets/tramo-4-lessons.js (LESSONS4).
 
 ## 녹음실 (record/)
 만드는 사람용 도구. 사이트 메뉴에는 없고 주소로만 들어간다 (…/record/). 사이트의 모든 스페인어 소리(구간별 카드, 문장, 따라 말하기 등)를 순서대로 보여 주고, 마이크 녹음이나 Gemini TTS로 채운다.

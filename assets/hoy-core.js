@@ -14,7 +14,8 @@ const HOY = (() => {
     const out = [];
     const sets = [[1, typeof TRAMO1 !== 'undefined' && TRAMO1, typeof LESSONS !== 'undefined' && LESSONS],
                   [2, typeof TRAMO2 !== 'undefined' && TRAMO2, typeof LESSONS2 !== 'undefined' && LESSONS2],
-                  [3, typeof TRAMO3 !== 'undefined' && TRAMO3, typeof LESSONS3 !== 'undefined' && LESSONS3]];
+                  [3, typeof TRAMO3 !== 'undefined' && TRAMO3, typeof LESSONS3 !== 'undefined' && LESSONS3],
+                [4, typeof TRAMO4 !== 'undefined' && TRAMO4, typeof LESSONS4 !== 'undefined' && LESSONS4]];
     sets.forEach(([t, list, lx]) => {
       if (!list || !lx) return;
       list.forEach(e => {
